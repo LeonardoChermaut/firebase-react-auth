@@ -1,15 +1,12 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { auth } from "../index";
 
-const AuthContext = React.createContext();
+const AuthContext = createContext();
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState();
-  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const signup = async (email, password) => {
     try {
@@ -49,43 +46,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateEmail = async (email) => {
+  const updateUser = async (updatedUser) => {
     try {
-      await currentUser.updateEmail(email);
-      setCurrentUser({ ...currentUser, email });
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  };
-
-  const updatePassword = async (password) => {
-    try {
-      await currentUser.updatePassword(password);
+      await currentUser.updateEmail(updatedUser.email);
+      await currentUser.updatePassword(updatedUser.password);
+      setCurrentUser({ ...currentUser, ...updatedUser });
     } catch (error) {
       throw new Error(error.message);
     }
   };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-      setLoading(false);
-    });
+    const unsubscribe = auth.onAuthStateChanged(setCurrentUser);
     return unsubscribe;
   }, []);
+
   const value = {
     currentUser,
-    login,
     signup,
+    login,
     logout,
     resetPassword,
-    updateEmail,
-    updatePassword,
+    updateUser,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
