@@ -1,12 +1,5 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useReducer,
-} from "react";
-import { auth, createUser, signOutUser, signInUser } from "../db/firebase";
-import { authReducer } from "./authReducer";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { auth, createUser, signOutUser, signInUser, passwordReset } from "../db/firebase";
 
 const AuthContext = createContext();
 
@@ -14,12 +7,13 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [state, dispatch] = useReducer(authReducer, { currentUser });
+  const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   const login = async (email, password) => {
     try {
       const { user } = await signInUser(auth, email, password);
-      dispatch({ type: "LOGIN", payload: user });
+      if (mounted) setCurrentUser(user);
     } catch (error) {
       console.error("error login\n", error.message);
     }
@@ -28,7 +22,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await signOutUser(auth);
-      dispatch({ type: "LOGOUT" });
+      if (mounted) setCurrentUser(null);
     } catch (error) {
       console.error(error.message);
     }
@@ -37,7 +31,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (email, password) => {
     try {
       const { user } = await createUser(auth, email, password);
-      dispatch({ type: "SIGNUP", payload: user });
+      if (mounted) setCurrentUser(user);
     } catch (error) {
       console.error(error.message);
     }
@@ -45,9 +39,9 @@ export const AuthProvider = ({ children }) => {
 
   const resetPassword = async (email) => {
     try {
-      await auth.sendPasswordResetEmail(email);
+      await passwordReset(email);
     } catch (error) {
-     console.error(error.message);
+      console.error(error.message);
     }
   };
 
@@ -62,18 +56,34 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(setCurrentUser);
-    return unsubscribe;
-  }, []);
+    setMounted(true);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (mounted) {
+        setCurrentUser(user);
+        setLoading(false);
+      }
+    });
+    return () => {
+      setMounted(false);
+      unsubscribe();
+    };
+  }, [mounted]);
+
+  const isAuthenticated = () => !!currentUser;
 
   const value = {
-    currentUser: state.currentUser,
-    signup,
+    currentUser,
+    isAuthenticated,
     login,
+    signup,
     logout,
     resetPassword,
     updateUser,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
 };

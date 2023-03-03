@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../contexts/index";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Card, Alert } from "react-bootstrap";
@@ -11,6 +11,12 @@ export const Login = () => {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
+  useEffect(() => {
+    return () => {
+      setLoading(false);
+    };
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -21,7 +27,7 @@ export const Login = () => {
       history.push("/");
     } catch (error) {
       setError("Erro ao efetuar login");
-     console.error(error.message);
+      console.error(error.message);
     }
 
     setLoading(false);

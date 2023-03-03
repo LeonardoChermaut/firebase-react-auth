@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../../contexts/index";
-import { EmployeForm } from "../employe-form/EmployeForm";
+import { EmployeForm } from "../index";
 
 export const Dashboard = () => {
   const history = useHistory();
@@ -14,8 +14,8 @@ export const Dashboard = () => {
       await logout();
       history.push("/login");
     } catch (error) {
-      console.error("error logout\n", error.message);
       setError("Failed to log out");
+      console.error("error logout\n", error.message);
     }
   };
 
@@ -25,8 +25,8 @@ export const Dashboard = () => {
         <Card.Body>
           <h2 className="text-center mb-4">Perfil</h2>
           {error && <Alert variant="danger">{error}</Alert>}
-          <strong>Email:</strong> {currentUser.email}
-          <Link to="/update-profile" className="btn btn-primary w-100 mt-3">
+          <strong>Email:</strong> {currentUser && currentUser.email}
+          <Link to="/profile" className="btn btn-primary w-100 mt-3">
             Atualizar Perfil
           </Link>
         </Card.Body>

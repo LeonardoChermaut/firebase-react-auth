@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import { db, storage } from "../../db/firebase";
 import { useAuth } from "../../contexts/authContext";
 import { Form, Button, Row, Col } from "react-bootstrap";
@@ -25,7 +25,7 @@ export const EmployeForm = () => {
     const fileRef = storageRef.child(photo.name);
     const fileSnapshot = await fileRef.put(photo);
     const fileUrl = await fileSnapshot.ref.getDownloadURL();
-    await db.collection("funcionarios").add({
+    await db.collection("employee").add({
       name,
       email,
       hiringDate,
@@ -51,6 +51,7 @@ export const EmployeForm = () => {
   };
 
   return (
+    
     <Form onSubmit={handleFormSubmit}>
       <Form.Group controlId="formName">
         <Form.Label>Nome</Form.Label>

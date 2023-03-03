@@ -1,6 +1,7 @@
 import {
   getAuth,
   signOut,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
@@ -17,10 +18,13 @@ const config = {
   appId: "1:918153009233:web:db289aba2902700c93c070",
 };
 
-export const app = initializeApp(config);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app);
-export const signOutUser = signOut;
-export const signInUser = signInWithEmailAndPassword;
-export const createUser = createUserWithEmailAndPassword;
+ const app = initializeApp(config);
+ const auth = getAuth(app);
+ const db = getFirestore(app);
+ const storage = getStorage(app);
+ const signOutUser = signOut;
+ const passwordReset = sendPasswordResetEmail;
+ const signInUser = signInWithEmailAndPassword;
+ const createUser = createUserWithEmailAndPassword;
+
+export { app, auth, db, storage, signOutUser, passwordReset, signInUser, createUser };
