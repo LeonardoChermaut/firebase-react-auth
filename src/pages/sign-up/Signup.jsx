@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useAuth } from "../../services/index";
+import { useAuth } from "../../contexts/index";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 
@@ -26,6 +26,7 @@ export const Signup = () => {
       await signup(emailRef.current.value, passwordRef.current.value);
       history.push("/");
     } catch (error) {
+      console.error("error signup\n", error.message);
       setError("Falha ao criar sua conta");
     } finally {
       setLoading(false);

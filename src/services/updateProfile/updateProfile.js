@@ -1,4 +1,4 @@
-import { auth } from "../index";
+import { auth } from "../../db/firebase";
 
 export const updateProfile = async (email, password) => {
   const user = auth.currentUser;

@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
-import { updateProfile, useAuth } from "../../services/index";
+import { useAuth } from "../../contexts";
+import { updateProfile } from "../../services/index";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 

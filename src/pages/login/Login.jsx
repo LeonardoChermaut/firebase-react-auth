@@ -1,49 +1,53 @@
 import React, { useRef, useState } from "react";
+import { useAuth } from "../../contexts/index";
+import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Card, Alert } from "react-bootstrap";
-import { useAuth } from "../../services/index";
-import { Link } from "react-router-dom";
 
-export const ForgotPassword = () => {
+export const Login = () => {
   const emailRef = useRef();
-  const { resetPassword } = useAuth();
+  const passwordRef = useRef();
+  const { login } = useAuth();
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      setMessage("");
       setError("");
       setLoading(true);
-      await resetPassword(emailRef.current.value);
-      setMessage("Verifique sua caixa de entrada para mais instruções");
-    } catch (e) {
-      console.error(e.message);
-      setError("Falha ao redefinir a senha");
+      await login(emailRef.current.value, passwordRef.current.value);
+      history.push("/");
+    } catch (error) {
+      setError("Erro ao efetuar login");
+     console.error(error.message);
     }
 
     setLoading(false);
-  }
+  };
 
   return (
     <>
       <Card>
         <Card.Body>
-          <h2 className="text-center mb-4">Esqueci minha senha</h2>
+          <h2 className="text-center mb-4">Login</h2>
           {error && <Alert variant="danger">{error}</Alert>}
-          {message && <Alert variant="success">{message}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group id="email">
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" ref={emailRef} required />
             </Form.Group>
+            <Form.Group id="password">
+              <Form.Label>Senha</Form.Label>
+              <Form.Control type="password" ref={passwordRef} required />
+            </Form.Group>
             <Button disabled={loading} className="w-100" type="submit">
-              Resetar senha
+              Entrar
             </Button>
           </Form>
           <div className="w-100 text-center mt-3">
-            <Link to="/login">Login</Link>
+            <Link to="/forgot-password">Esqueceu sua senha?</Link>
           </div>
         </Card.Body>
       </Card>

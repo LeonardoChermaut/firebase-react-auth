@@ -1,14 +1,9 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { AuthProvider } from "../src/services/index";
+import { AuthProvider } from "./contexts/index";
 import { PrivateRoute } from "./routers/index";
-import {
-  Signup,
-  Login,
-  ForgotPassword,
-  Dashboard,
-  Profile,
-} from "./components/index";
+import { Dashboard, EmployeForm } from "./components/index";
+import { Signup, Login, ForgotPassword, Profile } from "./pages/index";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 export const App = () => {

@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import { useAuth } from "../../services/index";
+import { useAuth } from "../../contexts/index";
+import { EmployeForm } from "../employe-form/EmployeForm";
 
 export const Dashboard = () => {
+  const history = useHistory();
   const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
-  const history = useHistory();
 
   const handleLogout = async () => {
     try {
       await logout();
       history.push("/login");
-    } catch (e) {
-      console.error(e.message);
+    } catch (error) {
+      console.error("error logout\n", error.message);
       setError("Failed to log out");
     }
   };

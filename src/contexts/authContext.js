@@ -1,5 +1,12 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { auth } from "../index";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useReducer,
+} from "react";
+import { auth, createUser, signOutUser, signInUser } from "../db/firebase";
+import { authReducer } from "./authReducer";
 
 const AuthContext = createContext();
 
@@ -7,34 +14,32 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-
-  const signup = async (email, password) => {
-    try {
-      const { user } = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
-      setCurrentUser(user);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  };
+  const [state, dispatch] = useReducer(authReducer, { currentUser });
 
   const login = async (email, password) => {
     try {
-      const { user } = await auth.signInWithEmailAndPassword(email, password);
-      setCurrentUser(user);
+      const { user } = await signInUser(auth, email, password);
+      dispatch({ type: "LOGIN", payload: user });
     } catch (error) {
-      throw new Error(error.message);
+      console.error("error login\n", error.message);
     }
   };
 
   const logout = async () => {
     try {
-      await auth.signOut();
-      setCurrentUser(null);
+      await signOutUser(auth);
+      dispatch({ type: "LOGOUT" });
     } catch (error) {
-      throw new Error(error.message);
+      console.error(error.message);
+    }
+  };
+
+  const signup = async (email, password) => {
+    try {
+      const { user } = await createUser(auth, email, password);
+      dispatch({ type: "SIGNUP", payload: user });
+    } catch (error) {
+      console.error(error.message);
     }
   };
 
@@ -42,7 +47,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await auth.sendPasswordResetEmail(email);
     } catch (error) {
-      throw new Error(error.message);
+     console.error(error.message);
     }
   };
 
@@ -52,7 +57,7 @@ export const AuthProvider = ({ children }) => {
       await currentUser.updatePassword(updatedUser.password);
       setCurrentUser({ ...currentUser, ...updatedUser });
     } catch (error) {
-      throw new Error(error.message);
+      console.error(error.message);
     }
   };
 
@@ -62,7 +67,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const value = {
-    currentUser,
+    currentUser: state.currentUser,
     signup,
     login,
     logout,
