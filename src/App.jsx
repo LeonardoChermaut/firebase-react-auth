@@ -1,31 +1,31 @@
 import React from "react";
-import { Container } from "react-bootstrap";
 import { AuthProvider } from "./contexts/index";
-import { PrivateRoute } from "./routers/index";
-import { Dashboard, EmployeForm } from "./components/index";
+import { PrivateRoute, PrivateLayout } from "./routers/index";
+import { Dashboard } from "./components/index";
 import { Signup, Login, ForgotPassword, Profile } from "./pages/index";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect,} from "react-router-dom";
 
 export const App = () => {
   return (
-    <Container
-      className="d-flex align-items-center justify-content-center"
-      style={{ minHeight: "100vh" }}
-    >
-      <div className="w-100" style={{ maxWidth: "400px" }}>
-        <Router>
-          <AuthProvider>
-            <Switch>
-              <PrivateRoute exact path="/" component={Dashboard} />
-              <PrivateRoute exact path="/register" component={EmployeForm} />
-              <PrivateRoute path="/profile" component={Profile} />
-              <Route path="/signup" component={Signup} />
-              <Route path="/login" component={Login} />
-              <Route path="/forgot-password" component={ForgotPassword} />
-            </Switch>
-          </AuthProvider>
-        </Router>
-      </div>
-    </Container>
+    <Router>
+      <AuthProvider>
+        <Switch>
+          <Route exact path="/">
+            <Redirect to="/inicio" />
+          </Route>
+          <Route path="/signup" component={Signup} />
+          <Route path="/login" component={Login} />
+          <Route path="/esqueci-minha-senha" component={ForgotPassword} />
+          <PrivateRoute>
+            <PrivateLayout>
+              <Switch>
+                <PrivateRoute exact path="/inicio" component={Dashboard} />
+                <PrivateRoute path="/perfil" component={Profile} />
+              </Switch>
+            </PrivateLayout>
+          </PrivateRoute>
+        </Switch>
+      </AuthProvider>
+    </Router>
   );
 };

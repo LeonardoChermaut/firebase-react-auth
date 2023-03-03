@@ -76,7 +76,7 @@ export const Profile = () => {
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        <Link to="/">Cancelar</Link>
+        <Link to="/inicio">Cancelar</Link>
       </div>
     </>
   );

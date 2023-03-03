@@ -48,7 +48,7 @@ const handleSubmit = async (e) => {
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        Precisa de uma conta? <Link to="/signup">Registre-se</Link>
+        Precisa de uma conta? <Link to="/registro">Registre-se</Link>
       </div>
     </>
   );

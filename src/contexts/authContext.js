@@ -1,5 +1,17 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { auth, createUser, signOutUser, signInUser, passwordReset } from "../db/firebase";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
+import {
+  auth,
+  createUser,
+  signOutUser,
+  signInUser,
+  passwordReset,
+} from "../db/firebase";
 
 const AuthContext = createContext();
 
@@ -8,21 +20,21 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [mounted, setMounted] = useState(false);
+  const mountedRef = useRef(true);
 
   const login = async (email, password) => {
     try {
       const { user } = await signInUser(auth, email, password);
-      if (mounted) setCurrentUser(user);
+      if (mountedRef.current) setCurrentUser(user);
     } catch (error) {
-      console.error("error login\n", error.message);
+      console.error("Failed to login\n", error.message);
     }
   };
 
   const logout = async () => {
     try {
       await signOutUser(auth);
-      if (mounted) setCurrentUser(null);
+      if (mountedRef.current) setCurrentUser(null);
     } catch (error) {
       console.error(error.message);
     }
@@ -31,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (email, password) => {
     try {
       const { user } = await createUser(auth, email, password);
-      if (mounted) setCurrentUser(user);
+      if (mountedRef.current) setCurrentUser(user);
     } catch (error) {
       console.error(error.message);
     }
@@ -56,18 +68,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    setMounted(true);
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (mounted) {
+      if (mountedRef.current) {
         setCurrentUser(user);
         setLoading(false);
       }
     });
     return () => {
-      setMounted(false);
+      mountedRef.current = false;
       unsubscribe();
     };
-  }, [mounted]);
+  }, []);
 
   const isAuthenticated = () => !!currentUser;
 

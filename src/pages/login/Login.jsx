@@ -4,16 +4,17 @@ import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 
 export const Login = () => {
+  const { login } = useAuth();
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login } = useAuth();
+  const history = useHistory();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
     return () => {
-      setLoading(false);
+      isMountedRef.current = false;
     };
   }, []);
 
@@ -24,7 +25,9 @@ export const Login = () => {
       setError("");
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
-      history.push("/");
+      if (isMountedRef.current) {
+        history.push("/");
+      }
     } catch (error) {
       setError("Erro ao efetuar login");
       console.error(error.message);
@@ -53,12 +56,12 @@ export const Login = () => {
             </Button>
           </Form>
           <div className="w-100 text-center mt-3">
-            <Link to="/forgot-password">Esqueceu sua senha?</Link>
+            <Link to="/esqueci-minha-senha">Esqueceu sua senha?</Link>
           </div>
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        Precisa de uma conta? <Link to="/signup">Registre-se</Link>
+        Precisa de uma conta? <Link to="/registro">Registre-se</Link>
       </div>
     </>
   );
