@@ -24,6 +24,7 @@ export const EmployeeForm = () => {
       const employeeRef = db.collection("employee").doc();
       const photoRef = storage.child(`employee/${employeeRef.id}/photo`);
       await photoRef.put(employee.photo);
+
       await employeeRef.set({
         status: employee.status,
         name: employee.name,
@@ -85,11 +86,13 @@ export const EmployeeForm = () => {
       .slice(0, 14);
   };
 
+  const cepMask = (value) => {
+    return value.replace(/\D/g, "").replace(/(\d{5})(\d)/, "$1-$2");
+  };
+
   const handleAddressChange = (event) => {
     const { name, value } = event.target;
-    const formattedValue = value
-      .replace(/\D/g, "")
-      .replace(/(\d{5})(\d{3})/, "$1-$2");
+    const formattedValue = name === "cep" ? cepMask(value) : value;
     setEmployee((prevEmployee) => ({
       ...prevEmployee,
       address: { ...prevEmployee.address, [name]: formattedValue },
