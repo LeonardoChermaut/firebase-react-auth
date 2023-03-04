@@ -4,7 +4,7 @@ import { Container, Form, Button } from "react-bootstrap";
 
 export const EmployeeForm = () => {
   const [employee, setEmployee] = useState({
-    disabled: true,
+    status: true,
     photo: null,
     name: "",
     email: "",
@@ -45,7 +45,7 @@ export const EmployeeForm = () => {
       .then(() => {
         alert("Funcionário adicionado com sucesso!");
         setEmployee({
-          disabled: true,
+          status: true,
           photo: null,
           name: "",
           email: "",
@@ -205,9 +205,9 @@ export const EmployeeForm = () => {
         <Form.Group controlId="status">
           <Form.Check
             type="switch"
-            label={employee.disabled ? "Ativo" : "Inativo"}
+            label={employee.status ? "Ativo" : "Inativo"}
             name="status"
-            checked={employee.disabled}
+            checked={employee.status}
             onChange={handleInputChange}
           />
         </Form.Group>
