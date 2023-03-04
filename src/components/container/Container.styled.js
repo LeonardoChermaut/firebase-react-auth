@@ -8,7 +8,7 @@ export const ContainerRouters = styled(Container)`
   justify-content: center;
 `;
 
-export const DivRouters = styled.div`
+export const DivRouters = styled(Container)`
   width: 50%;
   @media (max-width: 768px) {
     width: 90%;

@@ -1,49 +1,55 @@
 import React, { useRef, useState } from "react";
 import { useAuth } from "../../contexts";
-import { updateProfile } from "../../services/index";
 import { Link, useHistory } from "react-router-dom";
-import { Form, Button, Card, Alert } from "react-bootstrap";
+import { Form, Button, Card } from "react-bootstrap";
 
 export const Profile = () => {
+  const history = useHistory();
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { currentUser } = useAuth();
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const { currentUser, updatePassword, updateEmail } = useAuth();
 
-  const handleUpdateProfile = async (e) => {
+  const MESSAGE_PASSWORD_NOT_MATCH = `As senhas não conferem`;
+  const MESSAGE_UPDATED_SUCCSESS = `Perfil atualizado com sucesso`;
+  const MESSAGE_UPDATED_ERROR = `Ocorreu um erro ao atualizar seu perfil`;
+
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return setError("As senhas não conferem");
-    }
+    if (passwordRef.current.value !== passwordConfirmRef.current.value)
+      return alert(MESSAGE_PASSWORD_NOT_MATCH);
 
     try {
-      setError("");
+      const promises = [];
       setLoading(true);
-      await updateProfile(emailRef.current.value, passwordRef.current.value);
-      alert("Perfil atualizado com sucesso")
-      setSuccess("Perfil atualizado com sucesso");
+
+      if (emailRef.current.value !== currentUser.email) {
+        promises.push(updateEmail(emailRef.current.value));
+      }
+
+      if (passwordRef.current.value) {
+        promises.push(updatePassword(passwordRef.current.value));
+      }
+
+      await Promise.all(promises);
+      alert(MESSAGE_UPDATED_SUCCSESS);
       history.push("/");
     } catch (error) {
-      setError("Ocorreu um erro ao atualizar seu perfil");
-      throw new Error(error.message);
+      alert(MESSAGE_UPDATED_ERROR);
+      console.error(error.message);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <section>
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Atualizar perfil</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {success && <Alert variant="success">{success}</Alert>}
-          <Form onSubmit={handleUpdateProfile}>
+          <Form onSubmit={handleSubmit}>
             <Form.Group id="email">
               <Form.Label>Email</Form.Label>
               <Form.Control

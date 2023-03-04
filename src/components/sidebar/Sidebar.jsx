@@ -28,7 +28,7 @@ export const Sidebar = () => {
       await logout();
       history.replace("/login");
     } catch (error) {
-      console.error("error logout\n", error.message);
+      console.error(`error logout\n ${error.message}`);
     }
   };
 

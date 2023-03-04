@@ -1,8 +1,13 @@
 import {
   getAuth,
   signOut,
+  updateEmail,
+  updatePassword,
+  EmailAuthProvider,
+  onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  reauthenticateWithCredential,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
@@ -18,13 +23,33 @@ const config = {
   appId: "1:918153009233:web:db289aba2902700c93c070",
 };
 
- const app = initializeApp(config);
- const auth = getAuth(app);
- const db = getFirestore(app);
- const storage = getStorage(app);
- const signOutUser = signOut;
- const passwordReset = sendPasswordResetEmail;
- const signInUser = signInWithEmailAndPassword;
- const createUser = createUserWithEmailAndPassword;
+const app = initializeApp(config);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
-export { app, auth, db, storage, signOutUser, passwordReset, signInUser, createUser };
+const signOutUser = signOut;
+const updateEmailUser = updateEmail;
+const onAuthChange =  onAuthStateChanged;
+const updatePasswordUser = updatePassword;
+const passwordReset = sendPasswordResetEmail;
+const signInUser = signInWithEmailAndPassword;
+const credential = EmailAuthProvider.credential;
+const createUser = createUserWithEmailAndPassword;
+const reauthenticate = reauthenticateWithCredential;
+
+export {
+  db,
+  app,
+  auth,
+  storage,
+  signInUser,
+  createUser,
+  credential,
+  signOutUser,
+  onAuthChange,
+  passwordReset,
+  reauthenticate,
+  updateEmailUser,
+  updatePasswordUser,
+};
