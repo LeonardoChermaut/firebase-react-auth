@@ -3,7 +3,7 @@
 // import { useAuth } from "../../contexts/authContext";
 // import { Form, Button } from "react-bootstrap";
 
-// export const EmployeForm = () => {
+// export const EmployeeForm = () => {
 //   const { currentUser } = useAuth();
 //   const [employee, setEmployee] = useState({
 //     name: "",

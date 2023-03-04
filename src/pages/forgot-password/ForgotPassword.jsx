@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../../contexts/index";
 import { Link } from "react-router-dom";
+import { Container } from "../../components";
 
 export const ForgotPassword = () => {
   const emailRef = useRef();
@@ -22,12 +23,12 @@ const handleSubmit = async (e) => {
       console.error(e.message);
       setError("Falha ao redefinir a senha");
     }
-
     setLoading(false);
   }
 
   return (
-    <>
+    <section>
+      <Container>
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Esqueci minha senha</h2>
@@ -50,6 +51,7 @@ const handleSubmit = async (e) => {
       <div className="w-100 text-center mt-2">
         Precisa de uma conta? <Link to="/registro">Registre-se</Link>
       </div>
-    </>
+      </Container>
+    </section>
   );
 };

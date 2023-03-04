@@ -1,75 +1,11 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { IconContext } from "react-icons/lib";
-import {
-  IoMdPeople,
-  IoIosPaper,
-  IoMdHelpCircle,
-  IoMdLogOut,
-  IoMdHome,
-  IoMdPerson,
-} from "react-icons/io";
 import { FaBars } from "react-icons/fa";
-import { AiOutlineClose } from "react-icons/ai";
-import styled from "styled-components";
 import { useAuth } from "../../contexts";
-
-const Nav = styled.div`
-  background: #15171c;
-  height: 80px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const NavIcon = styled(Link)`
-  margin-left: 2rem;
-  font-size: 2rem;
-  height: 80px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const SidebarNav = styled.nav`
-  background: #15171c;
-  width: 250px;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  left: ${({ sidebar }) => (sidebar ? "0" : "-100%")};
-  transition: 350ms;
-  z-index: 10;
-`;
-
-const SidebarWrap = styled.div`
-  width: 100%;
-`;
-
-const SidebarLink = styled(Link)`
-  display: flex;
-  color: #e1e9fc;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  list-style: none;
-  height: 60px;
-  text-decoration: none;
-  font-size: 18px;
-
-  &:hover {
-    background: #252831;
-    border-left: 4px solid #632ce4;
-    cursor: pointer;
-  }
-`;
-
-const SidebarLabel = styled.span`
-  margin-left: 16px;
-`;
-
+import { AiOutlineClose } from "react-icons/ai";
+import { IoMdPeople, IoIosPaper, IoMdHelpCircle, IoMdLogOut, IoMdHome, IoMdPerson } from "react-icons/io";
+import { SidebarWrap, SidebarLabel, Navbar, SidebarLink, NavIcon, SidebarNav } from "./Sidebar.styled";
 
 export const Sidebar = () => {
   const { logout } = useAuth();
@@ -99,11 +35,11 @@ export const Sidebar = () => {
   return (
     <aside>
       <IconContext.Provider value={{ color: "#fff" }}>
-        <Nav>
+        <Navbar>
           <NavIcon to="#">
             <FaBars onClick={showSidebar} />
           </NavIcon>
-        </Nav>
+        </Navbar>
         <SidebarNav sidebar={sidebar}>
           <SidebarWrap>
             <NavIcon to="#">

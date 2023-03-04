@@ -37,7 +37,7 @@ export const Profile = () => {
   };
 
   return (
-    <>
+    <section>
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Atualizar perfil</h2>
@@ -78,6 +78,6 @@ export const Profile = () => {
       <div className="w-100 text-center mt-2">
         <Link to="/inicio">Cancelar</Link>
       </div>
-    </>
+    </section>
   );
 };

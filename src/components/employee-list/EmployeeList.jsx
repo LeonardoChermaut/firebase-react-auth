@@ -1,7 +1,8 @@
+import React, { useEffect, useState } from "react";
+import { db } from "../../db/firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { useState } from "react";
 
-const FuncionariosList = () => {
+export const EmployeeList = () => {
   const [employee, setEmployee] = useState([]);
 
   useEffect(() => {
@@ -29,16 +30,6 @@ const FuncionariosList = () => {
           </li>
         ))}
       </ul>
-    </div>
-  );
-};
-
-export const Employee = () => {
-  return (
-    <div>
-      <h1>Cadastro de funcionários</h1>
-      <FuncionariosForm />
-      <FuncionariosList />
     </div>
   );
 };

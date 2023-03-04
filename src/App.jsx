@@ -1,7 +1,7 @@
 import React from "react";
+import { Dashboard } from "./components/index";
 import { AuthProvider } from "./contexts/index";
 import { PrivateRoute, PrivateLayout } from "./routers/index";
-import { Dashboard } from "./components/index";
 import { Signup, Login, ForgotPassword, Profile } from "./pages/index";
 import { BrowserRouter as Router, Switch, Route, Redirect,} from "react-router-dom";
 
@@ -13,7 +13,7 @@ export const App = () => {
           <Route exact path="/">
             <Redirect to="/inicio" />
           </Route>
-          <Route path="/signup" component={Signup} />
+          <Route path="/registro" component={Signup} />
           <Route path="/login" component={Login} />
           <Route path="/esqueci-minha-senha" component={ForgotPassword} />
           <PrivateRoute>

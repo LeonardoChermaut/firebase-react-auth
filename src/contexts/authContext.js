@@ -1,17 +1,5 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useRef,
-} from "react";
-import {
-  auth,
-  createUser,
-  signOutUser,
-  signInUser,
-  passwordReset,
-} from "../db/firebase";
+import React, { createContext, useContext, useState, useEffect, useRef} from "react";
+import { auth, createUser, signOutUser, signInUser, passwordReset } from "../db/firebase";
 
 const AuthContext = createContext();
 
