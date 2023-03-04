@@ -1,17 +1,11 @@
 import React, { useState } from "react";
 import { db, storage } from "../../db/firebase";
-import { useAuth } from "../../contexts/authContext";
-import { Form, Button } from "react-bootstrap";
-
-const MAX_NAME_LENGTH = 50;
-const CPF_REGEX = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
-const CEP_REGEX = /^\d{5}-\d{3}$/;
-const MAX_DATE_LENGTH = 10;
-const DATE_REGEX = /^\d{2}\/\d{2}\/\d{4}$/;
+import { Container, Form, Button } from "react-bootstrap";
 
 export const EmployeeForm = () => {
-  const { currentUser } = useAuth();
   const [employee, setEmployee] = useState({
+    disabled: true,
+    photo: null,
     name: "",
     email: "",
     hiringDate: "",
@@ -23,183 +17,219 @@ export const EmployeeForm = () => {
       city: "",
       state: "",
     },
-    status: "ativo",
-    photo: null,
   });
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    const { photo, ...employeeData } = employee;
-    const storageRef = storage.ref();
-    const fileRef = storageRef.child(photo.name);
-    const fileSnapshot = await fileRef.put(photo);
-    const fileUrl = await fileSnapshot.ref.getDownloadURL();
-    await db.collection("employees").add({
-      ...employeeData,
-      photo: fileUrl,
-      userId: currentUser.uid,
-    });
+  const addEmployee = async () => {
+    try {
+      const employeeRef = db.collection("employee").doc();
+      const photoRef = storage.child(`employee/${employeeRef.id}/photo`);
+      await photoRef.put(employee.photo);
+      await employeeRef.set({
+        status: employee.status,
+        name: employee.name,
+        email: employee.email,
+        hiringDate: employee.hiringDate,
+        cpf: employee.cpf,
+        address: employee.address,
+        photoUrl: await photoRef.getDownloadURL(),
+      });
+    } catch (error) {
+      console.log("Erro ao adicionar funcionário: ", error);
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(employee);
+    addEmployee()
+      .then(() => {
+        alert("Funcionário adicionado com sucesso!");
+        setEmployee({
+          disabled: true,
+          photo: null,
+          name: "",
+          email: "",
+          hiringDate: "",
+          cpf: "",
+          address: {
+            street: "",
+            cep: "",
+            neighborhood: "",
+            city: "",
+            state: "",
+          },
+        });
+      })
+      .catch((error) => {
+        console.log("Erro ao adicionar funcionário: ", error);
+      });
+  };
+
+  const handleInputChange = (event) => {
+    const target = event.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = target.name;
+    const maskedValue = name === "cpf" ? cpfMask(value) : value;
     setEmployee({
-      name: "",
-      email: "",
-      hiringDate: "",
-      cpf: "",
-      address: {
-        street: "",
-        cep: "",
-        neighborhood: "",
-        city: "",
-        state: "",
-      },
-      status: "ativo",
-      photo: null,
+      ...employee,
+      [name]: maskedValue,
     });
   };
 
-  const handleCepChange = (e) => {
-    const cep = e.target.value.replace(/[^\d]/g, "").slice(0, 8);
-    const formattedCep = cep.replace(/(\d{5})(\d{3})/, "$1-$2");
-    setEmployee((prevState) => ({
-      ...prevState,
-      address: { ...prevState.address, cep: formattedCep },
+  const cpfMask = (value) => {
+    return value
+      .replace(/\D/g, "")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})/, "$1-$2")
+      .slice(0, 14);
+  };
+
+  const handleAddressChange = (event) => {
+    const { name, value } = event.target;
+    const formattedValue = value
+      .replace(/\D/g, "")
+      .replace(/(\d{5})(\d{3})/, "$1-$2");
+    setEmployee((prevEmployee) => ({
+      ...prevEmployee,
+      address: { ...prevEmployee.address, [name]: formattedValue },
     }));
   };
 
-  const handleNameChange = (e) => {
-    const name = e.target.value.slice(0, MAX_NAME_LENGTH);
-    setEmployee((prevState) => ({ ...prevState, name }));
-  };
-
-  const handleCpfChange = (e) => {
-    const cpf = e.target.value.replace(/[^\d]/g, "").slice(0, 11);
-    const formattedCpf = cpf.replace(
-      /(\d{3})(\d{3})(\d{3})(\d{2})/,
-      "$1.$2.$3-$4"
-    );
-    setEmployee((prevState) => ({ ...prevState, cpf: formattedCpf }));
-  };
-
-  const handleHiringDateChange = (e) => {
-    const hiringDate = e.target.value.slice(0, MAX_DATE_LENGTH);
-    setEmployee((prevState) => ({ ...prevState, hiringDate }));
-  };
-
-  const handlePhotoChange = (e) => {
-    const photo = e.target.files[0];
-    setEmployee((prevState) => ({ ...prevState, photo }));
-  };
-
   return (
-    <Form onSubmit={handleFormSubmit}>
-      <Form.Group controlId="formName">
-        <Form.Label>Nome</Form.Label>
-        <Form.Control
-          type="text"
-          value={employee.name}
-          onChange={handleNameChange}
-          maxLength={MAX_NAME_LENGTH}
-        />
-      </Form.Group>
-      <Form.Group controlId="formcep">
-        <Form.Label>CEP</Form.Label>
-        <Form.Control
-          type="text"
-          value={employee.address.cep}
-          onChange={handleCepChange}
-          maxLength={8}
-          pattern={CEP_REGEX.source}
-          required
-        />
-      </Form.Group>
-      <Form.Group controlId="formNeighborhood">
-        <Form.Label>Bairro</Form.Label>
-        <Form.Control
-          type="text"
-          value={employee.address.neighborhood}
-          onChange={(e) =>
-            setEmployee((prevState) => ({
-              ...prevState,
-              address: {
-                ...prevState.address,
-                neighborhood: e.target.value,
-              },
-            }))
-          }
-          maxLength={50}
-        />
-      </Form.Group>
-      <Form.Group controlId="formCity">
-        <Form.Label>Cidade</Form.Label>
-        <Form.Control
-          type="text"
-          value={employee.address.city}
-          onChange={(e) =>
-            setEmployee((prevState) => ({
-              ...prevState,
-              address: { ...prevState.address, city: e.target.value },
-            }))
-          }
-          maxLength={50}
-        />
-      </Form.Group>
-      <Form.Group controlId="formState">
-        <Form.Label>Estado</Form.Label>
-        <Form.Control
-          type="text"
-          value={employee.address.state}
-          onChange={(e) =>
-            setEmployee((prevState) => ({
-              ...prevState,
-              address: { ...prevState.address, state: e.target.value },
-            }))
-          }
-          maxLength={2}
-        />
-      </Form.Group>
-      <Form.Group controlId="formHiringDate">
-        <Form.Label>Data de contratação</Form.Label>
-        <Form.Control
-          type="text"
-          value={employee.hiringDate}
-          onChange={handleHiringDateChange}
-          maxLength={MAX_DATE_LENGTH}
-          pattern={DATE_REGEX.source}
-          required
-        />
-      </Form.Group>
-      <Form.Group controlId="formCpf">
-        <Form.Label>CPF</Form.Label>
-        <Form.Control
-          type="text"
-          value={employee.cpf}
-          onChange={handleCpfChange}
-          maxLength={14}
-          pattern={CPF_REGEX.source}
-          required
-        />
-      </Form.Group>
-      <Form.Group controlId="formEmail">
-        <Form.Label>Email</Form.Label>
-        <Form.Control
-          type="email"
-          value={employee.email}
-          onChange={(e) =>
-            setEmployee((prevState) => ({
-              ...prevState,
-              email: e.target.value,
-            }))
-          }
-          maxLength={50}
-          required
-        />
-      </Form.Group>
-      <Form.Group controlId="formPhoto">
-        <Form.Label>Foto</Form.Label>
-        <Form.Control type="file" onChange={handlePhotoChange} required />
-      </Form.Group>
-      <Button variant="primary" type="submit">
-        Cadastrar
-      </Button>
-    </Form>
+    <Container>
+      <h1>Cadastro de Funcionários</h1>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="name">
+          <Form.Label>Nome</Form.Label>
+          <Form.Control
+            type="text"
+            name="name"
+            placeholder="Leonardo Chermaut"
+            maxLength={30}
+            value={employee.name}
+            onChange={handleInputChange}
+          />
+        </Form.Group>
+
+        <Form.Group controlId="email">
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+            type="email"
+            name="email"
+            placeholder="leonardochermaut.jobs@gmail.com"
+            maxLength={50}
+            value={employee.email}
+            onChange={handleInputChange}
+          />
+        </Form.Group>
+        <Form.Group controlId="cpf">
+          <Form.Label>CPF</Form.Label>
+          <Form.Control
+            type="text"
+            name="cpf"
+            placeholder="165.547.999-47"
+            maxLength={14}
+            value={employee.cpf}
+            onChange={handleInputChange}
+          />
+        </Form.Group>
+
+        <Form.Group controlId="hiringDate">
+          <Form.Label>Data de Contratação</Form.Label>
+          <Form.Control
+            type="date"
+            name="hiringDate"
+            value={employee.hiringDate}
+            onChange={handleInputChange}
+          />
+        </Form.Group>
+
+        <Form.Group controlId="address.cep">
+          <Form.Label>CEP</Form.Label>
+          <Form.Control
+            type="text"
+            name="cep"
+            placeholder="25965-265"
+            maxLength={9}
+            value={employee.address.cep}
+            onChange={handleAddressChange}
+          />
+        </Form.Group>
+        <Form.Group controlId="address.city">
+          <Form.Label>Cidade</Form.Label>
+          <Form.Control
+            type="text"
+            name="city"
+            maxLength={30}
+            placeholder="Teresópolis"
+            value={employee.address.city}
+            onChange={handleAddressChange}
+          />
+        </Form.Group>
+        <Form.Group controlId="address.street">
+          <Form.Label>Rua</Form.Label>
+          <Form.Control
+            type="text"
+            name="street"
+            maxLength={50}
+            placeholder="Rua Marcos Salles Canano, 221"
+            value={employee.address.street}
+            onChange={handleAddressChange}
+          />
+        </Form.Group>
+
+        <Form.Group controlId="address.neighborhood">
+          <Form.Label>Bairro</Form.Label>
+          <Form.Control
+            type="text"
+            maxLength={30}
+            name="neighborhood"
+            placeholder="Vila Muqui"
+            value={employee.address.neighborhood}
+            onChange={handleAddressChange}
+          />
+        </Form.Group>
+
+        <Form.Group controlId="address.state">
+          <Form.Label>Estado</Form.Label>
+          <Form.Control
+            type="text"
+            name="state"
+            maxLength={2}
+            placeholder="RJ"
+            value={employee.address.state}
+            onChange={handleAddressChange}
+          />
+        </Form.Group>
+        <Form.Group controlId="status">
+          <Form.Check
+            type="switch"
+            label={employee.disabled ? "Ativo" : "Inativo"}
+            name="status"
+            checked={employee.disabled}
+            onChange={handleInputChange}
+          />
+        </Form.Group>
+
+        <Form.Group controlId="photo">
+          <Form.Label>Foto</Form.Label>
+          <Form.Control
+            type="file"
+            name="photo"
+            onChange={(event) =>
+              setEmployee({
+                ...employee,
+                photo: event.target.files[0],
+              })
+            }
+          />
+        </Form.Group>
+
+        <Button variant="primary" type="submit">
+          Enviar
+        </Button>
+      </Form>
+    </Container>
   );
 };
