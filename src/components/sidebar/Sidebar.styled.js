@@ -35,6 +35,10 @@ export const SidebarLink = styled(Nav.Link)`
   text-decoration: none;
   justify-content: space-between;
 
+  &:hover {
+    color: #632ce4;
+  }
+
   &::after {
     content: "";
     bottom: 0;
@@ -52,11 +56,11 @@ export const SidebarLink = styled(Nav.Link)`
 `;
 
 export const Navbar = styled.div`
-  background: #15171c;
   height: 5rem;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
+  background: #15171c;
+  justify-content: flex-start;
 `;
 
 export const SidebarWrap = styled.div`

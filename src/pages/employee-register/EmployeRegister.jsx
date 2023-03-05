@@ -4,7 +4,7 @@ import { cepMask, cpfMask } from "../../utils/utils";
 import { ButtonSend, ContainerRegisterEmployee, TitleRegister,} from "./Employee.Register";
 import { storage, upload, document, reference, getDownload, addDocument, updateDocUser, employeeCollection } from "../../db/firebase";
 
-const MESSAGE_EMPLOYEE_ERROR = `Erro ao adicionar funcionário`
+const MESSAGE_EMPLOYEE_ERROR = `Erro ao adicionar funcionário.`
 const MESSAGE_EMPLOYEE_SUCCESS = `Funcionário adicionado com sucesso!`;
 
 export const EmployeeRegister = () => {
@@ -35,14 +35,15 @@ export const EmployeeRegister = () => {
         hiringDate: employee.hiringDate,
       });
 
-      const photoRef = reference(storage, `employee/${employeeRef.id}/photo`);
-      await upload(photoRef);
-      const photoUrl = await getDownload(photoRef);
+      const photo = reference(storage, `employee/${employeeRef.id}/photo`);
+      await upload(photo);
+      const photoUrl = await getDownload(photo);
 
       const docRef = document(employeeCollection, employeeRef.id);
       await updateDocUser(docRef, { photoUrl });
     } catch (error) {
-      console.error(MESSAGE_EMPLOYEE_ERROR, error.message);
+      alert(MESSAGE_EMPLOYEE_ERROR)
+      console.error(error.message);
     }
   };
 
@@ -50,7 +51,7 @@ export const EmployeeRegister = () => {
     event.preventDefault();
     console.log(employee);
     addEmployee()
-      .then(() => {
+        .then(() => {
         alert(MESSAGE_EMPLOYEE_SUCCESS);
         setEmployee({
           cpf: "",
@@ -69,7 +70,8 @@ export const EmployeeRegister = () => {
         });
       })
       .catch((error) => {
-        console.error(MESSAGE_EMPLOYEE_ERROR, error);
+        alert(MESSAGE_EMPLOYEE_ERROR);
+        console.error(error);
       });
   };
 
@@ -89,8 +91,8 @@ export const EmployeeRegister = () => {
     const formattedValue = name === "cep" ? cepMask(value) : value;
     setEmployee((prevEmployee) => ({
       ...prevEmployee,
-      address: { ...prevEmployee.address, [name]: formattedValue },
-    }));
+      address: {
+        ...prevEmployee.address, [name]: formattedValue}}));
   };
 
   return (
@@ -102,9 +104,9 @@ export const EmployeeRegister = () => {
           <Form.Control
             type="text"
             name="name"
-            placeholder="Leonardo Chermaut"
             maxLength={30}
             value={employee.name}
+            placeholder="Leonardo Chermaut"
             onChange={handleInputChange}
           />
         </Form.Group>
@@ -114,9 +116,9 @@ export const EmployeeRegister = () => {
           <Form.Control
             type="email"
             name="email"
-            placeholder="leonardochermaut.jobs@gmail.com"
             maxLength={50}
             value={employee.email}
+            placeholder="leonardochermaut.jobs@gmail.com"
             onChange={handleInputChange}
           />
         </Form.Group>
@@ -125,9 +127,9 @@ export const EmployeeRegister = () => {
           <Form.Control
             type="text"
             name="cpf"
-            placeholder="165.547.999-47"
             maxLength={14}
             value={employee.cpf}
+            placeholder="165.547.952-47"
             onChange={handleInputChange}
           />
         </Form.Group>
@@ -147,8 +149,8 @@ export const EmployeeRegister = () => {
           <Form.Control
             type="text"
             name="cep"
-            placeholder="25965-265"
             maxLength={9}
+            placeholder="25965-265"
             value={employee.address.cep}
             onChange={handleAddressChange}
           />
@@ -170,8 +172,8 @@ export const EmployeeRegister = () => {
             type="text"
             name="street"
             maxLength={50}
-            placeholder="Rua Marcos Salles Canano, 221"
             value={employee.address.street}
+            placeholder="Rua Marcos Salles Canano, 221"
             onChange={handleAddressChange}
           />
         </Form.Group>
@@ -214,11 +216,7 @@ export const EmployeeRegister = () => {
           <Form.Control
             type="file"
             name="photo"
-            onChange={(event) =>
-              setEmployee({
-                ...employee,
-                photo: event.target.files[0],
-              })
+            onChange={(event) => setEmployee({...employee,photo: event.target.files[0]})
             }
           />
         </Form.Group>

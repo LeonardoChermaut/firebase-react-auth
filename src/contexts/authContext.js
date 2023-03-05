@@ -15,6 +15,8 @@ import {
   updateEmailUser,
   updatePasswordUser,
 } from "../db/firebase";
+import { EMAIL_ALREADY, MESSAGE_EMAIL_SUGGEST } from "../utils/errorContants";
+import { alertErrorRequest } from "../utils/utils";
 
 const AuthContext = createContext();
 
@@ -34,8 +36,8 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(user);
       }
     } catch (error) {
-      console.error(`Failed to login: ${error.message}`);
-      throw new Error();
+      alertErrorRequest();
+      console.error(error);
     }
   };
 
@@ -46,7 +48,8 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(null);
       }
     } catch (error) {
-      console.error(`Failed to logout: ${error.message}`);
+      alertErrorRequest();
+      console.error(error);
     }
   };
 
@@ -57,7 +60,12 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(user);
       }
     } catch (error) {
-      console.error(`Failed to signup: ${error.message}`);
+      if (error.code === EMAIL_ALREADY) {
+        alertErrorRequest(MESSAGE_EMAIL_SUGGEST);
+      } else {
+        alertErrorRequest();
+        console.error(error);
+      }
     }
   };
 
@@ -65,7 +73,8 @@ export const AuthProvider = ({ children }) => {
     try {
       await passwordReset(email);
     } catch (error) {
-      console.error(`Failed to reset password: ${error.message}`);
+      alertErrorRequest();
+      console.error(error);
     }
   };
 
@@ -74,7 +83,8 @@ export const AuthProvider = ({ children }) => {
       await updateEmailUser(authentication, email);
       setCurrentUser({ ...currentUser, ...updateEmail });
     } catch (error) {
-      console.error(`Ocorreu um erro ao atualizar o email: ${error.message}`);
+      alertErrorRequest();
+      console.error(error);
     }
   };
 
@@ -83,7 +93,8 @@ export const AuthProvider = ({ children }) => {
       await updatePasswordUser(authentication, password);
       setCurrentUser({ ...currentUser, ...updatePassword });
     } catch (error) {
-      console.error(`Ocorreu um erro ao atualizar a senha: ${error.message}`);
+      alertErrorRequest();
+      console.error(error);
     }
   };
 

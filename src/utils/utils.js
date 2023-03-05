@@ -1,3 +1,5 @@
+import { MESSAGE_GLOBAL_ERROR } from "./errorContants";
+
 export const cpfMask = (value) => {
   return value
     .replace(/\D/g, "")
@@ -9,4 +11,9 @@ export const cpfMask = (value) => {
 
 export const cepMask = (value) => {
   return value.replace(/\D/g, "").replace(/(\d{5})(\d)/, "$1-$2");
+};
+
+export const alertErrorRequest = (message) => {
+  const error = message || MESSAGE_GLOBAL_ERROR;
+  return alert(error);
 };
