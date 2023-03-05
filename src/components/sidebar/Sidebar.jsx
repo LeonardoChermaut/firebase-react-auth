@@ -12,7 +12,6 @@ export const Sidebar = () => {
   const history = useHistory();
   const [sidebar, setSidebar] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
-
   const showSidebar = () => setSidebar(!sidebar);
 
   const handleSubmenuClick = (index) => {
@@ -36,40 +35,40 @@ export const Sidebar = () => {
     <aside>
       <IconContext.Provider value={{ color: "#fff" }}>
         <Navbar>
-          <NavIcon to="#">
+          <NavIcon href="#">
             <FaBars onClick={showSidebar} />
           </NavIcon>
         </Navbar>
         <SidebarNav sidebar={sidebar}>
           <SidebarWrap>
-            <NavIcon to="#">
+            <NavIcon href="#">
               <AiOutlineClose onClick={showSidebar} />
             </NavIcon>
-            <SidebarLink to="/inicio" onClick={() => handleSubmenuClick(0)}>
+            <SidebarLink href="/inicio" onClick={() => handleSubmenuClick(0)}>
               <div>
                 <IoMdHome />
                 <SidebarLabel>Início</SidebarLabel>
               </div>
             </SidebarLink>
-            <SidebarLink to="/perfil" onClick={() => handleSubmenuClick(1)}>
+            <SidebarLink href="/perfil" onClick={() => handleSubmenuClick(1)}>
               <div>
                 <IoMdPerson />
                 <SidebarLabel>Perfil</SidebarLabel>
               </div>
             </SidebarLink>
-            <SidebarLink to="/usuarios" onClick={() => handleSubmenuClick(2)}>
+            <SidebarLink href="/cadastrar" onClick={() => handleSubmenuClick(2)}>
               <div>
                 <IoMdPeople />
-                <SidebarLabel>Usuários</SidebarLabel>
+                <SidebarLabel>Cadastrar</SidebarLabel>
               </div>
             </SidebarLink>
-            <SidebarLink to="/reportar" onClick={() => handleSubmenuClick(3)}>
+            <SidebarLink href="/reportar" onClick={() => handleSubmenuClick(3)}>
               <div>
                 <IoIosPaper />
                 <SidebarLabel>Reportar</SidebarLabel>
               </div>
             </SidebarLink>
-            <SidebarLink to="/support" onClick={() => handleSubmenuClick(4)}>
+            <SidebarLink href="/support" onClick={() => handleSubmenuClick(4)}>
               <div>
                 <IoMdHelpCircle />
                 <SidebarLabel>Support</SidebarLabel>

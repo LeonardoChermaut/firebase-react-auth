@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import { db, storage } from "../../db/firebase";
-import { Container, Form, Button } from "react-bootstrap";
+import { Form } from "react-bootstrap";
+import { cepMask, cpfMask } from "../../utils/utils";
+import { ButtonSend, ContainerRegisterEmployee, TitleRegister,} from "./Employee.Register";
+import { storage, upload, document, reference, getDownload, addDocument, updateDocUser, employeeCollection } from "../../db/firebase";
 
-export const EmployeeForm = () => {
+const MESSAGE_EMPLOYEE_ERROR = `Erro ao adicionar funcionário`
+const MESSAGE_EMPLOYEE_SUCCESS = `Funcionário adicionado com sucesso!`;
+
+export const EmployeeRegister = () => {
   const [employee, setEmployee] = useState({
     status: true,
     photo: null,
@@ -21,21 +26,23 @@ export const EmployeeForm = () => {
 
   const addEmployee = async () => {
     try {
-      const employeeRef = db.collection("employee").doc();
-      const photoRef = storage.child(`employee/${employeeRef.id}/photo`);
-      await photoRef.put(employee.photo);
-
-      await employeeRef.set({
-        status: employee.status,
+      const employeeRef = await addDocument(employeeCollection, {
+        cpf: employee.cpf,
         name: employee.name,
         email: employee.email,
-        hiringDate: employee.hiringDate,
-        cpf: employee.cpf,
+        status: employee.status,
         address: employee.address,
-        photoUrl: await photoRef.getDownloadURL(),
+        hiringDate: employee.hiringDate,
       });
+
+      const photoRef = reference(storage, `employee/${employeeRef.id}/photo`);
+      await upload(photoRef);
+      const photoUrl = await getDownload(photoRef);
+
+      const docRef = document(employeeCollection, employeeRef.id);
+      await updateDocUser(docRef, { photoUrl });
     } catch (error) {
-      console.log("Erro ao adicionar funcionário: ", error);
+      console.error(MESSAGE_EMPLOYEE_ERROR, error.message);
     }
   };
 
@@ -44,14 +51,12 @@ export const EmployeeForm = () => {
     console.log(employee);
     addEmployee()
       .then(() => {
-        alert("Funcionário adicionado com sucesso!");
+        alert(MESSAGE_EMPLOYEE_SUCCESS);
         setEmployee({
-          status: true,
-          photo: null,
+          cpf: "",
           name: "",
           email: "",
           hiringDate: "",
-          cpf: "",
           address: {
             street: "",
             cep: "",
@@ -59,10 +64,12 @@ export const EmployeeForm = () => {
             city: "",
             state: "",
           },
+          photo: null,
+          status: true,
         });
       })
       .catch((error) => {
-        console.log("Erro ao adicionar funcionário: ", error);
+        console.error(MESSAGE_EMPLOYEE_ERROR, error);
       });
   };
 
@@ -77,19 +84,6 @@ export const EmployeeForm = () => {
     });
   };
 
-  const cpfMask = (value) => {
-    return value
-      .replace(/\D/g, "")
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d{1,2})/, "$1-$2")
-      .slice(0, 14);
-  };
-
-  const cepMask = (value) => {
-    return value.replace(/\D/g, "").replace(/(\d{5})(\d)/, "$1-$2");
-  };
-
   const handleAddressChange = (event) => {
     const { name, value } = event.target;
     const formattedValue = name === "cep" ? cepMask(value) : value;
@@ -100,8 +94,8 @@ export const EmployeeForm = () => {
   };
 
   return (
-    <Container>
-      <h1>Cadastro de Funcionários</h1>
+    <ContainerRegisterEmployee>
+      <TitleRegister>Cadastro de Funcionários</TitleRegister>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="name">
           <Form.Label>Nome</Form.Label>
@@ -206,7 +200,8 @@ export const EmployeeForm = () => {
           />
         </Form.Group>
         <Form.Group controlId="status">
-          <Form.Check
+        <Form.Label>Situação do Funcionário</Form.Label>
+          <Form.Check 
             type="switch"
             label={employee.status ? "Ativo" : "Inativo"}
             name="status"
@@ -214,9 +209,8 @@ export const EmployeeForm = () => {
             onChange={handleInputChange}
           />
         </Form.Group>
-
         <Form.Group controlId="photo">
-          <Form.Label>Foto</Form.Label>
+        <Form.Label>Foto</Form.Label>
           <Form.Control
             type="file"
             name="photo"
@@ -228,11 +222,10 @@ export const EmployeeForm = () => {
             }
           />
         </Form.Group>
-
-        <Button variant="primary" type="submit">
+        <ButtonSend variant="success" type="submit">
           Enviar
-        </Button>
+        </ButtonSend>
       </Form>
-    </Container>
+    </ContainerRegisterEmployee>
   );
 };

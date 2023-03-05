@@ -1,17 +1,16 @@
-import {
-  getAuth,
-  signOut,
-  updateEmail,
-  updatePassword,
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  reauthenticateWithCredential,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
-import { getFirestore } from "firebase/firestore";
+import { ref, uploadBytes, getStorage, getDownloadURL } from "firebase/storage";
+import { doc, addDoc, updateDoc, collection, getFirestore } from "firebase/firestore";
+import { 
+  getAuth, 
+  signOut, 
+  updateEmail, 
+  updatePassword, 
+  onAuthStateChanged, 
+  sendPasswordResetEmail, 
+  signInWithEmailAndPassword, 
+  reauthenticateWithCredential, 
+  createUserWithEmailAndPassword } from "firebase/auth";
 
 const configuration = {
   apiKey: "AIzaSyDUmhD7a60MOudn7XLNQlVymuo4yRfXxHw",
@@ -26,8 +25,15 @@ const app = initializeApp(configuration);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+const employeeCollection = collection(db, "employee");
 
+const document = doc;
+const reference = ref;
+const addDocument = addDoc;
+const upload = uploadBytes;
 const signOutUser = signOut;
+const updateDocUser = updateDoc;
+const getDownload = getDownloadURL;
 const updateEmailUser = updateEmail;
 const onAuthChange = onAuthStateChanged;
 const updatePasswordUser = updatePassword;
@@ -40,13 +46,20 @@ export {
   db,
   app,
   auth,
+  upload,
   storage,
+  document,
+  reference,
   signInUser,
   createUser,
+  addDocument,
   signOutUser,
+  getDownload,
   onAuthChange,
+  updateDocUser,
   passwordReset,
   reauthenticate,
   updateEmailUser,
+  employeeCollection,
   updatePasswordUser,
 };

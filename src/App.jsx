@@ -1,9 +1,9 @@
 import React from "react";
-import { Dashboard, EmployeeForm } from "./components/index";
-import { AuthProvider, useAuth } from "./contexts/authContext";
+import { Dashboard} from "./components/index";
 import { PrivateRoute, PrivateLayout } from "./routers/index";
-import { Signup, Login, ForgotPassword, Profile } from "./pages/index";
+import { AuthProvider, useAuth } from "./contexts/authContext";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { Signup, Login, ForgotPassword, Profile ,EmployeeRegister} from "./pages/index";
 
 export const App = () => {
   const { isAuthenticated } = useAuth() ?? {};
@@ -19,7 +19,7 @@ export const App = () => {
           <PrivateRoute path="/">
             <PrivateLayout>
               <Route path="/inicio" component={Dashboard} />
-              <Route path="/usuario" component={EmployeeForm} />
+              <Route path="/cadastrar" component={EmployeeRegister} />
               <Route path="/perfil" component={Profile} />
             </PrivateLayout>
           </PrivateRoute>

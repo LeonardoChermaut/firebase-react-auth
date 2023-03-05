@@ -2,48 +2,58 @@ import styled from "styled-components";
 import { Nav } from "react-bootstrap";
 
 export const SidebarNav = styled(Nav)`
-  background: #15171c;
-  width: 250px;
+  top: 0;
+  z-index: 10;
   height: 100vh;
   display: flex;
-  justify-content: center;
   position: fixed;
-  top: 0;
-  left: ${({ sidebar }) => (sidebar ? "0" : "-100%")};
+  width: 15.625rem;
   transition: 350ms;
-  z-index: 10;
+  background: #15171c;
+  justify-content: center;
+  left: ${({ sidebar }) => (sidebar ? "0" : "-100%")};
 `;
 
 export const NavIcon = styled(Nav.Link)`
-  margin-left: 2rem;
-  font-size: 2rem;
-  height: 80px;
+  height: 5rem;
   display: flex;
-  justify-content: flex-start;
+  font-size: 2rem;
+  margin-left: 2rem;
   align-items: center;
+  justify-content: flex-start;
 `;
 
 export const SidebarLink = styled(Nav.Link)`
   display: flex;
   color: #e1e9fc;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
+  padding: 1.25rem;
   list-style: none;
-  height: 60px;
+  height: 3.75rem;
+  position: relative;
+  align-items: center;
+  font-size: 1.125rem;
   text-decoration: none;
-  font-size: 18px;
+  justify-content: space-between;
 
-  &:hover {
-    background: #252831;
-    border-left: 4px solid #632ce4;
+  &::after {
+    content: "";
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 0.12rem;
+    position: absolute;
+    background-color: #632ce4;
+    transition: width 0.5s ease;
     cursor: pointer;
+  }
+  &:hover::after {
+    width: 100%;
   }
 `;
 
 export const Navbar = styled.div`
   background: #15171c;
-  height: 80px;
+  height: 5rem;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -54,5 +64,5 @@ export const SidebarWrap = styled.div`
 `;
 
 export const SidebarLabel = styled.span`
-  margin-left: 16px;
+  margin-left: 1rem;
 `;
