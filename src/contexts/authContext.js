@@ -1,10 +1,5 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useRef,
-} from "react";
+import React, { createContext, useContext, useState, useEffect, useRef } from "react";
+import { alertRequest, EMAIL_ALREADY, MESSAGE_EMAIL_ERROR , MESSAGE_PASSWORD_WEAK_ERROR, PASSWORD_WEAK  } from "../utils/index";
 import {
   auth,
   createUser,
@@ -15,8 +10,6 @@ import {
   updateEmailUser,
   updatePasswordUser,
 } from "../db/firebase";
-import { EMAIL_ALREADY, MESSAGE_EMAIL_SUGGEST } from "../utils/errorContants";
-import { alertErrorRequest } from "../utils/utils";
 
 const AuthContext = createContext();
 
@@ -36,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(user);
       }
     } catch (error) {
-      alertErrorRequest();
+      alertRequest();
       console.error(error);
     }
   };
@@ -48,32 +41,36 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(null);
       }
     } catch (error) {
-      alertErrorRequest();
+      alertRequest();
       console.error(error);
     }
   };
 
   const signup = async (email, password) => {
-    try {
-      const { user } = await createUser(auth, email, password);
-      if (mountedRef.current) {
-        setCurrentUser(user);
-      }
-    } catch (error) {
-      if (error.code === EMAIL_ALREADY) {
-        alertErrorRequest(MESSAGE_EMAIL_SUGGEST);
+  try {
+    const { user } = await createUser(auth, email, password);
+    if (mountedRef.current) {
+      setCurrentUser(user);
+    }
+  } catch (error) {
+    if (error.code === EMAIL_ALREADY) {
+      alertRequest(MESSAGE_EMAIL_ERROR);
+    } else {
+      if (error.code === PASSWORD_WEAK) {
+        alertRequest(MESSAGE_PASSWORD_WEAK_ERROR);
       } else {
-        alertErrorRequest();
+        alertRequest();
         console.error(error);
       }
     }
-  };
-
+  }
+};
+  
   const resetPassword = async (email) => {
     try {
       await passwordReset(email);
     } catch (error) {
-      alertErrorRequest();
+      alertRequest();
       console.error(error);
     }
   };
@@ -83,7 +80,7 @@ export const AuthProvider = ({ children }) => {
       await updateEmailUser(authentication, email);
       setCurrentUser({ ...currentUser, ...updateEmail });
     } catch (error) {
-      alertErrorRequest();
+      alertRequest();
       console.error(error);
     }
   };
@@ -93,7 +90,7 @@ export const AuthProvider = ({ children }) => {
       await updatePasswordUser(authentication, password);
       setCurrentUser({ ...currentUser, ...updatePassword });
     } catch (error) {
-      alertErrorRequest();
+      alertRequest();
       console.error(error);
     }
   };

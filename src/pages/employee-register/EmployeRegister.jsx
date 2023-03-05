@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import { cepMask, cpfMask } from "../../utils/utils";
 import { ButtonSend, ContainerRegisterEmployee, TitleRegister,} from "./Employee.Register";
+import { alertRequest, MESSAGE_EMPLOYEE_ADD_ERROR, MESSAGE_EMPLOYEE_ADD_SUCCESS } from "../../utils/index";
 import { storage, upload, document, reference, getDownload, addDocument, updateDocUser, employeeCollection } from "../../db/firebase";
-
-const MESSAGE_EMPLOYEE_ERROR = `Erro ao adicionar funcionário.`
-const MESSAGE_EMPLOYEE_SUCCESS = `Funcionário adicionado com sucesso!`;
 
 export const EmployeeRegister = () => {
   const [employee, setEmployee] = useState({
@@ -42,8 +40,8 @@ export const EmployeeRegister = () => {
       const docRef = document(employeeCollection, employeeRef.id);
       await updateDocUser(docRef, { photoUrl });
     } catch (error) {
-      alert(MESSAGE_EMPLOYEE_ERROR)
-      console.error(error.message);
+      alertRequest(MESSAGE_EMPLOYEE_ADD_ERROR);
+      console.error(error);
     }
   };
 
@@ -52,7 +50,7 @@ export const EmployeeRegister = () => {
     console.log(employee);
     addEmployee()
         .then(() => {
-        alert(MESSAGE_EMPLOYEE_SUCCESS);
+        alertRequest(MESSAGE_EMPLOYEE_ADD_SUCCESS);
         setEmployee({
           cpf: "",
           name: "",
@@ -70,7 +68,7 @@ export const EmployeeRegister = () => {
         });
       })
       .catch((error) => {
-        alert(MESSAGE_EMPLOYEE_ERROR);
+        alertRequest(MESSAGE_EMPLOYEE_ADD_ERROR);
         console.error(error);
       });
   };

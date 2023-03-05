@@ -2,6 +2,12 @@ import React, { useRef, useState } from "react";
 import { useAuth } from "../../contexts";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Card } from "react-bootstrap";
+import {
+  alertRequest,
+  MESSAGE_PASSWORD_NOT_MATCH,
+  MESSAGE_UPDATED_ERROR,
+  MESSAGE_UPDATED_SUCCSESS,
+} from "../../utils/index";
 
 export const Profile = () => {
   const history = useHistory();
@@ -10,10 +16,6 @@ export const Profile = () => {
   const passwordConfirmRef = useRef();
   const [loading, setLoading] = useState(false);
   const { currentUser, updatePassword, updateEmail } = useAuth();
-
-  const MESSAGE_PASSWORD_NOT_MATCH = `As senhas não conferem`;
-  const MESSAGE_UPDATED_SUCCSESS = `Perfil atualizado com sucesso`;
-  const MESSAGE_UPDATED_ERROR = `Ocorreu um erro ao atualizar seu perfil`;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -34,11 +36,11 @@ export const Profile = () => {
       }
 
       await Promise.all(promises);
-      alert(MESSAGE_UPDATED_SUCCSESS);
+      alertRequest(MESSAGE_UPDATED_SUCCSESS);
       history.push("/");
     } catch (error) {
-      alert(MESSAGE_UPDATED_ERROR);
-      console.error(error.message);
+      alertRequest(MESSAGE_UPDATED_ERROR);
+      console.error(error);
     } finally {
       setLoading(false);
     }

@@ -3,6 +3,8 @@ import { useAuth } from "../../contexts/index";
 import { Link, useHistory } from "react-router-dom";
 import { Container } from "../../components";
 import { Form, Button, Card, Alert } from "react-bootstrap";
+import { MESSAGE_LOGIN_ERROR } from "../../utils/messages";
+
 
 export const Login = () => {
   const { login } = useAuth();
@@ -30,8 +32,8 @@ export const Login = () => {
         history.push("/");
       }
     } catch (error) {
-      setError("Erro ao efetuar login");
-      console.error(error.message);
+      setError(MESSAGE_LOGIN_ERROR);
+      console.error(error);
     }
 
     setLoading(false);

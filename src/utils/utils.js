@@ -1,4 +1,5 @@
-import { MESSAGE_GLOBAL_ERROR } from "./errorContants";
+import { MESSAGE_GLOBAL_ERROR } from "./index";
+
 
 export const cpfMask = (value) => {
   return value
@@ -13,7 +14,8 @@ export const cepMask = (value) => {
   return value.replace(/\D/g, "").replace(/(\d{5})(\d)/, "$1-$2");
 };
 
-export const alertErrorRequest = (message) => {
-  const error = message || MESSAGE_GLOBAL_ERROR;
-  return alert(error);
+export const alertRequest = (param) => {
+  const message = param || MESSAGE_GLOBAL_ERROR;
+  return alert(message);
 };
+

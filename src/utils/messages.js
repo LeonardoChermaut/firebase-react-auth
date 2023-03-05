@@ -1,0 +1,13 @@
+export const PASSWORD_WEAK = "auth/weak-password";
+export const EMAIL_ALREADY = "auth/email-already-in-use";
+export const MESSAGE_LOGIN_ERROR = "Erro ao efetuar login";
+export const MESSAGE_PASSWORD_NOT_MATCH = "As senhas não conferem";
+export const MESSAGE_UPDATED_SUCCSESS = "Perfil atualizado com sucesso";
+export const MESSAGE_EMPLOYEE_ADD_ERROR = "Erro ao adicionar funcionário."
+export const MESSAGE_RESET_PASSWORD_ERROR = "Falha ao redefinir a senha";
+export const MESSAGE_UPDATED_ERROR = "Ocorreu um erro ao atualizar seu perfil";
+export const MESSAGE_EMPLOYEE_ADD_SUCCESS = "Funcionário adicionado com sucesso!";
+export const MESSAGE_PASSWORD_WEAK_ERROR = "A senha deve ser de no mínimo 6 caracteres";
+export const MESSAGE_GLOBAL_ERROR = "Erro ao executar a operação, tente novamente mais tarde";
+export const MESSAGE_EMAIL_SEND_RECOVER = "Verifique sua caixa de entrada para mais instruções";
+export const MESSAGE_EMAIL_ERROR = "Este e-mail já está em uso. Tente fazer login ou use outro endereço de e-mail.";
