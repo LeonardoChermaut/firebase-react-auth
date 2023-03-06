@@ -20,8 +20,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
 
-  const authentication = auth.currentUser;
-
   const login = async (email, password) => {
     try {
       const { user } = await signInUser(auth, email, password);
@@ -75,25 +73,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateEmail = async (email) => {
+  const updateUserCredentials = async (email, password) => {
     try {
-      await updateEmailUser(authentication, email);
-      setCurrentUser({ ...currentUser, ...updateEmail });
+      const authentication = auth.currentUser;
+      if (email && email !== currentUser.email) {
+        await updateEmailUser(authentication, email);
+      }
+  
+      if (password) {
+        await updatePasswordUser(authentication, password);
+      }
+  
+      setCurrentUser((prevUser) => ({ ...prevUser, email }));
     } catch (error) {
       alertRequest();
       console.error(error);
     }
   };
-
-  const updatePassword = async (password) => {
-    try {
-      await updatePasswordUser(authentication, password);
-      setCurrentUser({ ...currentUser, ...updatePassword });
-    } catch (error) {
-      alertRequest();
-      console.error(error);
-    }
-  };
+  
 
   useEffect(() => {
     const unsubscribe = onAuthChange(auth, (user) => {
@@ -118,8 +115,7 @@ export const AuthProvider = ({ children }) => {
     signup,
     logout,
     resetPassword,
-    updatePassword,
-    updateEmail,
+    updateUserCredentials
   };
 
   return (
