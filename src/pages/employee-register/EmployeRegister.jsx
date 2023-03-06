@@ -32,23 +32,24 @@ export const EmployeeRegister = () => {
         address: employee.address,
         hiringDate: employee.hiringDate,
       });
-
+  
       const photo = reference(storage, `employee/${employeeRef.id}/photo`);
-      await upload(photo);
+      await upload(photo, employee.photo);
       const photoUrl = await getDownload(photo);
-
+      
       const docRef = document(employeeCollection, employeeRef.id);
       await updateDocUser(docRef, { photoUrl });
+      console.log(photoUrl)
      
     } catch (error) {
       alertRequest(MESSAGE_EMPLOYEE_ADD_ERROR);
       console.error(error);
     }
   };
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(employee);
     addEmployee()
         .then(() => {
         alertRequest(MESSAGE_EMPLOYEE_ADD_SUCCESS);
@@ -85,6 +86,24 @@ export const EmployeeRegister = () => {
     });
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setEmployee(prevEmployee => ({
+      ...prevEmployee,
+      photo: file,
+    }));
+  
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onloadend = () => {
+      const photoBlob = new Blob([reader.result], { type: file.type });
+      setEmployee(prevEmployee => ({
+        ...prevEmployee,
+        photo: photoBlob,
+      }));
+    };
+  };
+  
   const handleAddressChange = (event) => {
     const { name, value } = event.target;
     const formattedValue = name === "cep" ? cepMask(value) : value;
@@ -215,9 +234,8 @@ export const EmployeeRegister = () => {
           <Form.Control
             type="file"
             name="photo"
-            onChange={(event) => setEmployee({...employee,photo: event.target.files[0]})
-            }
-          />
+            accept="image/*"
+            onChange={handleFileChange}/>
         </Form.Group>
         <ButtonSend variant="success" type="submit">
           Enviar

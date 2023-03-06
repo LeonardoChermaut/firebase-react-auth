@@ -34,7 +34,7 @@ export const Profile = () => {
       alertRequest(MESSAGE_UPDATED_ERROR);
       return;
     }
-    
+
     try {
       setLoading(true);
       if (email !== currentUser.email || password) {
@@ -82,7 +82,7 @@ export const Profile = () => {
                   placeholder="********"
                 />
               </Form.Group>
-              <Button disabled={loading} className="w-100" type="submit">
+              <Button disabled={loading} className="w-100" type="submit" variant="outline-primary">
                 Atualizar
               </Button>
             </Form>

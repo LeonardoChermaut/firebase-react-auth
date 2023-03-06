@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { ref, uploadBytes, getStorage, getDownloadURL } from "firebase/storage";
-import { doc, addDoc, updateDoc, collection, getFirestore, getDocs } from "firebase/firestore";
+import { doc, addDoc, updateDoc, collection, getFirestore, deleteDoc , getDocs } from "firebase/firestore";
 import { getAuth, signOut, updateEmail, updatePassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword,  reauthenticateWithCredential, createUserWithEmailAndPassword } from "firebase/auth";
 
 const configuration = {
@@ -28,11 +28,12 @@ const updateDocUser = updateDoc;
 const getDownload = getDownloadURL;
 const updateEmailUser = updateEmail;
 const onAuthChange = onAuthStateChanged;
+const deleteDocument = deleteDoc;
 const updatePasswordUser = updatePassword;
 const passwordReset = sendPasswordResetEmail;
 const signInUser = signInWithEmailAndPassword;
 const createUser = createUserWithEmailAndPassword;
 const reauthenticate = reauthenticateWithCredential;
 
-export { db, app, auth, upload, storage, document, reference, signInUser, createUser, addDocument, signOutUser, getDocument, 
+export { db, app, auth, upload, storage, document, deleteDocument, reference, signInUser, createUser, addDocument, signOutUser, getDocument, 
  getDownload, onAuthChange, updateDocUser, passwordReset, reauthenticate, updateEmailUser, employeeCollection, updatePasswordUser };

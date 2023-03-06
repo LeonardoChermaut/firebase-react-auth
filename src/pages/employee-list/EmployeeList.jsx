@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { employeeCollection, getDocument } from "../../db/firebase";
-import { ButtonAction, TableEmployee, TitleTableEmployee, ContainerTableEmployee } from "./Employee.List.styled";
 import { Col } from "react-bootstrap";
+import { alertRequest, MESSAGE_DELETE_ERROR, MESSAGE_DELETE_SUCCESS } from "../../utils/index";
+import { employeeCollection, getDocument, deleteDocument, document, db } from "../../db/firebase";
+import { ButtonAction, TableEmployee, TitleTableEmployee, ContainerTableEmployee, FigureImage } from "./Employee.List.styled";
 
 export const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
+  const[isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -14,23 +16,38 @@ export const EmployeeList = () => {
         ...doc.data(),
       }));
       setEmployees(employees);
+      setIsLoading(false);
     })();
   }, []);
+
+  const handleDeleteEmployee = async (id) => {
+    try {
+      const employeeRef = document(db, "employee", id);
+      await deleteDocument(employeeRef);
+      const updatedEmployees = employees.filter((employee) => employee.id !== id);
+      setEmployees(updatedEmployees);
+      alertRequest(MESSAGE_DELETE_SUCCESS);
+    } catch (error) {
+      alertRequest(MESSAGE_DELETE_ERROR);
+      console.error(error);
+    }
+  };
 
   return (
     <section>
       <ContainerTableEmployee fluid>
         <TitleTableEmployee>Funcionários Cadastrados</TitleTableEmployee>
+        <div></div>
         <TableEmployee responsive striped bordered hover variant="dark">
           <thead>
             <tr>
               <th>#</th>
+              <th>Foto</th>
               <th>Nome</th>
               <th>Email</th>
               <th>CPF</th>
               <th>Data de Contratação</th>
               <th>Status</th>
-              <th>Foto</th>
               <th>Endereço</th>
               <th>Ações</th>
             </tr>
@@ -39,21 +56,21 @@ export const EmployeeList = () => {
             {employees.map((employee, index) => (
               <tr key={employee.id}>
                 <td>{index + 1}</td>
+                <td>
+                  {employee.photoUrl && (
+                    <FigureImage
+                      src={employee.photoUrl}
+                      alt="Foto do funcionário"
+                      width={100}
+                      height={100}
+                    />
+                  )}
+                </td>
                 <td>{employee.name}</td>
                 <td>{employee.email}</td>
                 <td>{employee.cpf}</td>
                 <td>{employee.hiringDate}</td>
                 <td>{employee.status ? "Ativo" : "Inativo"}</td>
-                <td>
-                  {employee.photo && (
-                    <img
-                      src={employee.photo}
-                      alt="Foto do funcionário"
-                      width="1000"
-                      height="1000"
-                    />
-                  )}
-                </td>
                 <td>
                   <div>
                     {employee.address.street}, {employee.address.number}
@@ -65,10 +82,14 @@ export const EmployeeList = () => {
                   <div>CEP: {employee.address.cep}</div>
                 </td>
                 <Col>
-                  <ButtonAction variant="primary" size="sm">
+                  <ButtonAction size="sm" variant="outline-primary">
                     Editar
                   </ButtonAction>
-                  <ButtonAction variant="danger" size="sm">
+                  <ButtonAction
+                    size="sm"
+                    variant="outline-danger"
+                    onClick={() => handleDeleteEmployee(employee.id)}
+                  >
                     Excluir
                   </ButtonAction>
                 </Col>

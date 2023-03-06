@@ -14,12 +14,12 @@ export const ContainerTableEmployee = styled(Container)`
 export const TableEmployee = styled(Table)`
   width: 90%;
   margin: 0 auto;
-  text-align: center;
   align-items: center;
+  text-align: center;
   justify-content: center;
   border-radius: 1rem;
   @media (max-width: 756px) {
-    width: auto;
+    width: 100%;
   }
 `;
 
@@ -30,4 +30,8 @@ export const ButtonAction = styled(Button)`
   @media (max-width: 756px) {
     width: 100%;
   }
+`;
+
+export const FigureImage = styled.img`
+  border-radius: 1rem;
 `;
