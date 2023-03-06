@@ -4,6 +4,7 @@ import { IconContext } from "react-icons/lib";
 import { FaBars } from "react-icons/fa";
 import { useAuth } from "../../contexts";
 import { AiOutlineClose } from "react-icons/ai";
+import { CgProfile } from "react-icons/cg";
 import { IoMdPeople, IoIosPaper, IoMdHelpCircle, IoMdLogOut, IoMdHome, IoMdPerson } from "react-icons/io";
 import { SidebarWrap, SidebarLabel, Navbar, SidebarLink, NavIcon, SidebarNav } from "./Sidebar.styled";
 
@@ -52,7 +53,7 @@ export const Sidebar = () => {
             </SidebarLink>
             <SidebarLink href="/perfil" onClick={() => handleSubmenuClick(1)}>
               <div>
-                <IoMdPerson />
+                <CgProfile/> 
                 <SidebarLabel>Perfil</SidebarLabel>
               </div>
             </SidebarLink>
@@ -60,6 +61,12 @@ export const Sidebar = () => {
               <div>
                 <IoMdPeople />
                 <SidebarLabel>Cadastrar</SidebarLabel>
+              </div>
+            </SidebarLink>
+               <SidebarLink href="/funcionarios" onClick={() => handleSubmenuClick(1)}>
+              <div>
+                <IoMdPerson/> 
+                <SidebarLabel>Funcionários</SidebarLabel>
               </div>
             </SidebarLink>
             <SidebarLink href="/reportar" onClick={() => handleSubmenuClick(3)}>

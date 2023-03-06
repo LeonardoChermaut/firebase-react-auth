@@ -3,7 +3,7 @@ import { Dashboard} from "./components/index";
 import { PrivateRoute, PrivateLayout } from "./routers/index";
 import { AuthProvider, useAuth } from "./contexts/authContext";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
-import { Signup, Login, ForgotPassword, Profile ,EmployeeRegister} from "./pages/index";
+import { Signup, Login, ForgotPassword, Profile ,EmployeeRegister, EmployeeList} from "./pages/index";
 
 export const App = () => {
   const { isAuthenticated } = useAuth() ?? {};
@@ -20,6 +20,7 @@ export const App = () => {
             <PrivateLayout>
               <Route path="/inicio" component={Dashboard} />
               <Route path="/cadastrar" component={EmployeeRegister} />
+              <Route path="/funcionarios" component={EmployeeList} />
               <Route path="/perfil" component={Profile} />
             </PrivateLayout>
           </PrivateRoute>

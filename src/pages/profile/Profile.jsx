@@ -8,6 +8,7 @@ import {
   MESSAGE_UPDATED_ERROR,
   MESSAGE_UPDATED_SUCCSESS,
 } from "../../utils/index";
+import { Container } from "../../components";
 
 export const Profile = () => {
   const history = useHistory();
@@ -48,6 +49,7 @@ export const Profile = () => {
 
   return (
     <section>
+      <Container>
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Atualizar perfil</h2>
@@ -85,7 +87,8 @@ export const Profile = () => {
       </Card>
       <div className="w-100 text-center mt-2">
         <Link to="/inicio">Cancelar</Link>
-      </div>
+        </div>
+        </Container>
     </section>
   );
 };

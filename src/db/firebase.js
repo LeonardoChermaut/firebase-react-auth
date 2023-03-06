@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { ref, uploadBytes, getStorage, getDownloadURL } from "firebase/storage";
-import { doc, addDoc, updateDoc, collection, getFirestore } from "firebase/firestore";
+import { doc, addDoc, updateDoc, collection, getFirestore, getDocs } from "firebase/firestore";
 import { 
   getAuth, 
   signOut, 
@@ -32,6 +32,7 @@ const reference = ref;
 const addDocument = addDoc;
 const upload = uploadBytes;
 const signOutUser = signOut;
+const getDocument = getDocs;
 const updateDocUser = updateDoc;
 const getDownload = getDownloadURL;
 const updateEmailUser = updateEmail;
@@ -54,6 +55,7 @@ export {
   createUser,
   addDocument,
   signOutUser,
+  getDocument,
   getDownload,
   onAuthChange,
   updateDocUser,

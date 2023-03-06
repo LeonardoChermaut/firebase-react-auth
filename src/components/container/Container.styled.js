@@ -9,8 +9,9 @@ export const ContainerRouters = styled(Container)`
 `;
 
 export const DivRouters = styled(Container)`
-  width: 50%;
+  width: 70%;
   @media (max-width: 768px) {
     width: 90%;
   }
 `;
+

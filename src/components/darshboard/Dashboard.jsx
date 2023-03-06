@@ -2,12 +2,14 @@ import React from "react";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/index";
+import { Container } from "../index"
 
 export const Dashboard = () => {
   const { currentUser } = useAuth();
 
   return (
     <section>
+      <Container>
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Perfil</h2>
@@ -16,7 +18,8 @@ export const Dashboard = () => {
             Atualizar Perfil
           </Link>
         </Card.Body>
-      </Card>
+        </Card>
+        </Container>
     </section>
   );
 };

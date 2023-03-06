@@ -1,5 +1,4 @@
 import React from "react";
-import { Container } from "../components/container/Container";
 import { Sidebar } from "../components/sidebar/Sidebar";
 import { useAuth } from "../contexts/index";
 
@@ -11,7 +10,7 @@ export const PrivateLayout = ({ children }) => {
   return (
     <>
       <Sidebar />
-      <Container>{children}</Container>
+      {children}
     </>
   );
 };

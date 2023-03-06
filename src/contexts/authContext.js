@@ -55,14 +55,14 @@ export const AuthProvider = ({ children }) => {
   } catch (error) {
     if (error.code === EMAIL_ALREADY) {
       alertRequest(MESSAGE_EMAIL_ERROR);
-    } else {
+    }
       if (error.code === PASSWORD_WEAK) {
         alertRequest(MESSAGE_PASSWORD_WEAK_ERROR);
       } else {
         alertRequest();
         console.error(error);
       }
-    }
+    
   }
 };
   

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import { cepMask, cpfMask } from "../../utils/utils";
-import { ButtonSend, ContainerRegisterEmployee, TitleRegister,} from "./Employee.Register";
+import { ButtonSend, ContainerRegisterEmployee, TitleRegister,} from "./Employee.Register.styled";
 import { alertRequest, MESSAGE_EMPLOYEE_ADD_ERROR, MESSAGE_EMPLOYEE_ADD_SUCCESS } from "../../utils/index";
 import { storage, upload, document, reference, getDownload, addDocument, updateDocUser, employeeCollection } from "../../db/firebase";
 
@@ -39,6 +39,7 @@ export const EmployeeRegister = () => {
 
       const docRef = document(employeeCollection, employeeRef.id);
       await updateDocUser(docRef, { photoUrl });
+     
     } catch (error) {
       alertRequest(MESSAGE_EMPLOYEE_ADD_ERROR);
       console.error(error);
