@@ -1,12 +1,14 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
-import { alertRequest, EMAIL_ALREADY, MESSAGE_EMAIL_ERROR , MESSAGE_PASSWORD_WEAK_ERROR, PASSWORD_WEAK  } from "../utils/index";
+import { showMessageRequest, EMAIL_ALREADY, EMAIL_ERROR_MESSAGE , PASSWORD_WEAK_ERROR_MESSAGE, PASSWORD_WEAK, USER_NOT_FOUND, USER_NOT_FOUND_MESSAGE  } from "../utils/index";
 import { auth, createUser, signOutUser, signInUser, passwordReset, onAuthChange, updateEmailUser, updatePasswordUser } from "../db/firebase";
+import { useHistory } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
+  const history = useHistory();
   const mountedRef = useRef(true);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
@@ -18,11 +20,17 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(user);
       }
     } catch (error) {
-      alertRequest();
-      console.error(error);
+      if (error.code === USER_NOT_FOUND) {
+        showMessageRequest(USER_NOT_FOUND_MESSAGE).then(() => {
+          setCurrentUser(null);
+          history.push("/login");
+        });
+      } else {
+        showMessageRequest();
+        console.error(error);
+      }
     }
   };
-
   const logout = async () => {
     try {
       await signOutUser(auth);
@@ -30,37 +38,35 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(null);
       }
     } catch (error) {
-      alertRequest();
+      showMessageRequest();
       console.error(error);
     }
   };
 
   const signup = async (email, password) => {
-
-  try {
-    const { user } = await createUser(auth, email, password);
-    if (mountedRef.current) {
-      setCurrentUser(user);
-    }
-  } catch (error) {
-    if (error.code === EMAIL_ALREADY) {
-      alertRequest(MESSAGE_EMAIL_ERROR);
-    }
+    try {
+      const { user } = await createUser(auth, email, password);
+      if (mountedRef.current) {
+        setCurrentUser(user);
+      }
+    } catch (error) {
+      if (error.code === EMAIL_ALREADY) {
+        showMessageRequest(EMAIL_ERROR_MESSAGE);
+      }
       if (error.code === PASSWORD_WEAK) {
-        alertRequest(MESSAGE_PASSWORD_WEAK_ERROR);
+        showMessageRequest(PASSWORD_WEAK_ERROR_MESSAGE);
       } else {
-        alertRequest();
+        showMessageRequest();
         console.error(error);
       }
-    
-  }
-};
-  
+    }
+  };
+
   const resetPassword = async (email) => {
     try {
       await passwordReset(email);
     } catch (error) {
-      alertRequest();
+      showMessageRequest();
       console.error(error);
     }
   };
@@ -71,18 +77,18 @@ export const AuthProvider = ({ children }) => {
       if (email && email !== currentUser.email) {
         await updateEmailUser(authentication, email);
       }
-  
+
       if (password) {
         await updatePasswordUser(authentication, password);
       }
-  
+
       setCurrentUser((prevUser) => ({ ...prevUser, email }));
     } catch (error) {
-      alertRequest();
+      showMessageRequest();
       console.error(error);
     }
   };
-  
+
   useEffect(() => {
     const unsubscribe = onAuthChange(auth, (user) => {
       if (mountedRef.current) {
@@ -90,25 +96,22 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     });
-
     return () => {
       mountedRef.current = false;
       unsubscribe();
     };
   }, []);
 
-  const isAuthenticated = () => !!currentUser;
-
   const authContextValue = {
     currentUser,
-    isAuthenticated,
+    isAuthenticated: !!currentUser,
     login,
     signup,
     logout,
     resetPassword,
-    updateUserCredentials
+    updateUserCredentials,
   };
-
+  
   return (
     <AuthContext.Provider value={authContextValue}>
       {!loading && children}

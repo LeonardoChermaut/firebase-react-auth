@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Container } from "../../components";
 import { useAuth } from "../../contexts/index";
 import { Form, Button, Card, Alert } from "react-bootstrap";
-import { MESSAGE_EMAIL_SEND_RECOVER, MESSAGE_RESET_PASSWORD_ERROR } from "../../utils/index";
+import { EMAIL_SEND_RECOVER_MESSAGE, RESET_PASSWORD_ERROR_MESSAGE } from "../../utils/index";
 
 export const ForgotPassword = () => {
   const emailRef = useRef();
@@ -19,10 +19,10 @@ export const ForgotPassword = () => {
       setError("");
       setLoading(true);
       await resetPassword(emailRef.current.value);
-      setMessage(MESSAGE_EMAIL_SEND_RECOVER);
+      setMessage(EMAIL_SEND_RECOVER_MESSAGE);
     } catch (e) {
       console.error(e.message);
-      setError(MESSAGE_RESET_PASSWORD_ERROR);
+      setError(RESET_PASSWORD_ERROR_MESSAGE);
     }
     setLoading(false);
   };

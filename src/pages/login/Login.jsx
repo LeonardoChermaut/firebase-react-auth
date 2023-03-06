@@ -3,7 +3,7 @@ import { Container } from "../../components";
 import { useAuth } from "../../contexts/index";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Card, Alert } from "react-bootstrap";
-import { MESSAGE_LOGIN_ERROR } from "../../utils/messages";
+import { LOGIN_ERROR_MESSAGE } from "../../utils/messages";
 
 
 export const Login = () => {
@@ -11,9 +11,9 @@ export const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const history = useHistory();
+  const isMountedRef = useRef(true);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const isMountedRef = useRef(true);
 
   useEffect(() => {
     return () => {
@@ -32,7 +32,7 @@ export const Login = () => {
         history.push("/");
       }
     } catch (error) {
-      setError(MESSAGE_LOGIN_ERROR);
+      setError(LOGIN_ERROR_MESSAGE);
       console.error(error);
     }
     setLoading(false);

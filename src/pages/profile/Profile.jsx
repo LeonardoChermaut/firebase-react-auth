@@ -3,7 +3,7 @@ import { useAuth } from "../../contexts";
 import { Container } from "../../components";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Card } from "react-bootstrap";
-import { alertRequest, MESSAGE_PASSWORD_NOT_MATCH, MESSAGE_UPDATED_ERROR, MESSAGE_UPDATED_SUCCSESS } from "../../utils/index";
+import { showMessageRequest, PASSWORD_NOT_MATCH_MESSAGE, UPDATED_ERROR_MESSAGE, UPDATED_SUCCSESS_MESSAGE } from "../../utils/index";
 
 export const Profile = () => {
   const history = useHistory();
@@ -12,10 +12,11 @@ export const Profile = () => {
   const passwordConfirmRef = useRef();
   const [loading, setLoading] = useState(false);
   const { currentUser, updateUserCredentials } = useAuth();
+  
 
   const validatePassword = (password, confirmPassword) => {
     if (password !== confirmPassword) {
-      return { isValid: false, message: MESSAGE_PASSWORD_NOT_MATCH };
+      return { isValid: false, message: PASSWORD_NOT_MATCH_MESSAGE };
     }
     return { isValid: true };
   };
@@ -27,11 +28,11 @@ export const Profile = () => {
     const confirmPassword = passwordConfirmRef.current.value.trim();
     const { isValid } = validatePassword(password, confirmPassword);
     if (!isValid) {
-      alertRequest(MESSAGE_PASSWORD_NOT_MATCH)
+      showMessageRequest(PASSWORD_NOT_MATCH_MESSAGE)
       return;
     }
     if (email === currentUser.email && !password) {
-      alertRequest(MESSAGE_UPDATED_ERROR);
+      showMessageRequest(UPDATED_ERROR_MESSAGE);
       return;
     }
 
@@ -40,10 +41,10 @@ export const Profile = () => {
       if (email !== currentUser.email || password) {
         await updateUserCredentials(email, password);
       }
-      alertRequest(MESSAGE_UPDATED_SUCCSESS);
+      showMessageRequest(UPDATED_SUCCSESS_MESSAGE);
       history.push("/");
     } catch (error) {
-      alertRequest(MESSAGE_UPDATED_ERROR);
+      showMessageRequest(UPDATED_ERROR_MESSAGE);
       console.error(error);
     } finally {
       setLoading(false);

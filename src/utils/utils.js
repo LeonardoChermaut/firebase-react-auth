@@ -1,4 +1,5 @@
-import { MESSAGE_GLOBAL_ERROR } from "./index";
+import Swal from "sweetalert2";
+import { GLOBAL_ERROR_MESSAGE, schemaAlert, schemaSettings, schemaSwal } from "./index";
 
 export const cpfMask = (value) => {
   return value
@@ -13,8 +14,14 @@ export const cepMask = (value) => {
   return value.replace(/\D/g, "").replace(/(\d{5})(\d)/, "$1-$2");
 };
 
-export const alertRequest = (param) => {
-  const message = param || MESSAGE_GLOBAL_ERROR;
-  return alert(message);
+export const showMessageRequest = (param) => {
+  const message = param || GLOBAL_ERROR_MESSAGE;
+  return Swal.fire(schemaSettings.title(message), schemaSettings);
+};
+
+export const alertConfirmResquest = async () => {
+  const alert = Swal.mixin(schemaSwal, schemaSwal.customClass);
+  const { isConfirmed } = await alert.fire(schemaAlert);
+  return isConfirmed;
 };
 

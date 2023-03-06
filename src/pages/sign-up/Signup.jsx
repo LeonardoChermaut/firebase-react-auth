@@ -3,7 +3,7 @@ import { Container } from "../../components";
 import { useAuth } from "../../contexts/index";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Card, Alert } from "react-bootstrap";
-import { EMAIL_ALREADY, MESSAGE_EMAIL_ERROR, MESSAGE_PASSWORD_NOT_MATCH } from "../../utils/index";
+import { EMAIL_ALREADY, EMAIL_ERROR_MESSAGE, PASSWORD_NOT_MATCH_MESSAGE } from "../../utils/index";
 
 export const Signup = () => {
   const emailRef = useRef();
@@ -18,7 +18,7 @@ export const Signup = () => {
     e.preventDefault();
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      setError(MESSAGE_PASSWORD_NOT_MATCH);
+      setError(PASSWORD_NOT_MATCH_MESSAGE);
       return;
     }
     setLoading(true);
@@ -30,7 +30,7 @@ export const Signup = () => {
     setLoading(false);
     if (result.error) {
       if (result.error === EMAIL_ALREADY) {
-        setError(MESSAGE_EMAIL_ERROR);
+        setError(EMAIL_ERROR_MESSAGE);
       } else {
         setError(result.error);
       }

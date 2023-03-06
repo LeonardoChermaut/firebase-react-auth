@@ -13,15 +13,32 @@ export const App = () => {
       <AuthProvider>
         <Switch>
           <Redirect exact from="/" to="/inicio" />
-          <Route path="/registro" component={isAuthenticated ? Redirect : Signup} />
-          <Route path="/login" component={isAuthenticated ? Redirect : Login} />
-          <Route path="/esqueci-minha-senha" component={isAuthenticated ? Redirect : ForgotPassword} />
+          <Route
+            path="/registro"
+            component={isAuthenticated ? Redirect : Signup}
+          />
+          <Route
+            path="/login"
+            component={isAuthenticated ? Redirect : Login}
+          />
+          <Route
+            path="/esqueci-minha-senha"
+            component={isAuthenticated ? Redirect : ForgotPassword}
+          />
           <PrivateRoute path="/">
             <PrivateLayout>
-              <Route path="/inicio" component={Dashboard} />
-              <Route path="/cadastrar" component={EmployeeRegister} />
-              <Route path="/funcionarios" component={EmployeeList} />
-              <Route path="/perfil" component={Profile} />
+              <Route exact path="/inicio" component={Dashboard} />
+              <Route
+                exact
+                path="/cadastrar"
+                component={EmployeeRegister}
+              />
+              <Route
+                exact
+                path="/funcionarios"
+                component={EmployeeList}
+              />
+              <Route exact path="/perfil" component={Profile} />
             </PrivateLayout>
           </PrivateRoute>
         </Switch>

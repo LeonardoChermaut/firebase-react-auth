@@ -2,27 +2,31 @@ import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import { cepMask, cpfMask } from "../../utils/utils";
 import { ButtonSend, ContainerRegisterEmployee, TitleRegister,} from "./Employee.Register.styled";
-import { alertRequest, MESSAGE_EMPLOYEE_ADD_ERROR, MESSAGE_EMPLOYEE_ADD_SUCCESS } from "../../utils/index";
+import { showMessageRequest, EMPLOYEE_ADD_ERROR_MESSAGE, EMPLOYEE_ADD_SUCCESS_MESSAGE } from "../../utils/index";
 import { storage, upload, document, reference, getDownload, addDocument, updateDocUser, employeeCollection } from "../../db/firebase";
 
+const INITIAL_EMPLOYEE_VALUE = {
+  status: true,
+  photo: null,
+  name: "",
+  email: "",
+  hiringDate: "",
+  cpf: "",
+  address: {
+    street: "",
+    cep: "",
+    neighborhood: "",
+    city: "",
+    state: "",
+  },
+}
+
 export const EmployeeRegister = () => {
-  const [employee, setEmployee] = useState({
-    status: true,
-    photo: null,
-    name: "",
-    email: "",
-    hiringDate: "",
-    cpf: "",
-    address: {
-      street: "",
-      cep: "",
-      neighborhood: "",
-      city: "",
-      state: "",
-    },
-  });
+  const [employee, setEmployee] = useState(INITIAL_EMPLOYEE_VALUE);
+  const [loading, setLoading] = useState(false);
 
   const addEmployee = async () => {
+    setLoading(true);
     try {
       const employeeRef = await addDocument(employeeCollection, {
         cpf: employee.cpf,
@@ -39,10 +43,10 @@ export const EmployeeRegister = () => {
       
       const docRef = document(employeeCollection, employeeRef.id);
       await updateDocUser(docRef, { photoUrl });
-      console.log(photoUrl)
-     
+      showMessageRequest(EMPLOYEE_ADD_SUCCESS_MESSAGE);
+      setLoading(false);
     } catch (error) {
-      alertRequest(MESSAGE_EMPLOYEE_ADD_ERROR);
+      showMessageRequest(EMPLOYEE_ADD_ERROR_MESSAGE);
       console.error(error);
     }
   };
@@ -52,25 +56,11 @@ export const EmployeeRegister = () => {
     event.preventDefault();
     addEmployee()
         .then(() => {
-        alertRequest(MESSAGE_EMPLOYEE_ADD_SUCCESS);
-        setEmployee({
-          cpf: "",
-          name: "",
-          email: "",
-          hiringDate: "",
-          address: {
-            street: "",
-            cep: "",
-            neighborhood: "",
-            city: "",
-            state: "",
-          },
-          photo: null,
-          status: true,
-        });
+        showMessageRequest(EMPLOYEE_ADD_SUCCESS_MESSAGE);
+        setEmployee(INITIAL_EMPLOYEE_VALUE);
       })
       .catch((error) => {
-        alertRequest(MESSAGE_EMPLOYEE_ADD_ERROR);
+        showMessageRequest(EMPLOYEE_ADD_ERROR_MESSAGE);
         console.error(error);
       });
   };
@@ -92,7 +82,6 @@ export const EmployeeRegister = () => {
       ...prevEmployee,
       photo: file,
     }));
-  
     const reader = new FileReader();
     reader.readAsArrayBuffer(file);
     reader.onloadend = () => {
@@ -237,8 +226,8 @@ export const EmployeeRegister = () => {
             accept="image/*"
             onChange={handleFileChange}/>
         </Form.Group>
-        <ButtonSend variant="success" type="submit">
-          Enviar
+        <ButtonSend disabled={loading} variant="success" type="submit">
+        {loading ? "Enviando..." : "Enviar"}
         </ButtonSend>
       </Form>
     </ContainerRegisterEmployee>
