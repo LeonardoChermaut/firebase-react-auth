@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Container } from "../../components";
 import { useAuth } from "../../contexts/index";
 import { Link, useHistory } from "react-router-dom";
-import { Container } from "../../components";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { MESSAGE_LOGIN_ERROR } from "../../utils/messages";
 
@@ -35,7 +35,6 @@ export const Login = () => {
       setError(MESSAGE_LOGIN_ERROR);
       console.error(error);
     }
-
     setLoading(false);
   };
 

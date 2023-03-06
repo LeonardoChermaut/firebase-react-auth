@@ -1,13 +1,9 @@
 import React, { useRef, useState } from "react";
+import { Container } from "../../components";
 import { useAuth } from "../../contexts/index";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Card, Alert } from "react-bootstrap";
-import { Container } from "../../components";
-import {
-  EMAIL_ALREADY,
-  MESSAGE_EMAIL_ERROR,
-  MESSAGE_PASSWORD_NOT_MATCH,
-} from "../../utils/index";
+import { EMAIL_ALREADY, MESSAGE_EMAIL_ERROR, MESSAGE_PASSWORD_NOT_MATCH } from "../../utils/index";
 
 export const Signup = () => {
   const emailRef = useRef();

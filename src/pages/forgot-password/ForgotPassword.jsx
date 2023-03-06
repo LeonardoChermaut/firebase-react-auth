@@ -1,12 +1,9 @@
 import React, { useRef, useState } from "react";
-import { Form, Button, Card, Alert } from "react-bootstrap";
-import { useAuth } from "../../contexts/index";
 import { Link } from "react-router-dom";
 import { Container } from "../../components";
-import {
-  MESSAGE_EMAIL_SEND_RECOVER,
-  MESSAGE_RESET_PASSWORD_ERROR,
-} from "../../utils/index";
+import { useAuth } from "../../contexts/index";
+import { Form, Button, Card, Alert } from "react-bootstrap";
+import { MESSAGE_EMAIL_SEND_RECOVER, MESSAGE_RESET_PASSWORD_ERROR } from "../../utils/index";
 
 export const ForgotPassword = () => {
   const emailRef = useRef();

@@ -1,12 +1,12 @@
 import React from "react";
-import { Sidebar } from "../components/sidebar/Sidebar";
 import { useAuth } from "../contexts/index";
+import { Sidebar } from "../components/sidebar/Sidebar";
 
 export const PrivateLayout = ({ children }) => {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) return null;
-  
+
   return (
     <>
       <Sidebar />

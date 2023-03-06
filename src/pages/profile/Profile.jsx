@@ -17,7 +17,6 @@ export const Profile = () => {
     if (password !== confirmPassword) {
       return { isValid: false, message: MESSAGE_PASSWORD_NOT_MATCH };
     }
-
     return { isValid: true };
   };
 
@@ -26,19 +25,16 @@ export const Profile = () => {
     const email = emailRef.current.value.trim();
     const password = passwordRef.current.value.trim();
     const confirmPassword = passwordConfirmRef.current.value.trim();
-
     const { isValid } = validatePassword(password, confirmPassword);
-
     if (!isValid) {
       alertRequest(MESSAGE_PASSWORD_NOT_MATCH)
       return;
     }
-
     if (email === currentUser.email && !password) {
       alertRequest(MESSAGE_UPDATED_ERROR);
       return;
     }
-
+    
     try {
       setLoading(true);
       if (email !== currentUser.email || password) {

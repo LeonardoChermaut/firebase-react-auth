@@ -1,6 +1,5 @@
 import { MESSAGE_GLOBAL_ERROR } from "./index";
 
-
 export const cpfMask = (value) => {
   return value
     .replace(/\D/g, "")

@@ -1,15 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 import { alertRequest, EMAIL_ALREADY, MESSAGE_EMAIL_ERROR , MESSAGE_PASSWORD_WEAK_ERROR, PASSWORD_WEAK  } from "../utils/index";
-import {
-  auth,
-  createUser,
-  signOutUser,
-  signInUser,
-  passwordReset,
-  onAuthChange,
-  updateEmailUser,
-  updatePasswordUser,
-} from "../db/firebase";
+import { auth, createUser, signOutUser, signInUser, passwordReset, onAuthChange, updateEmailUser, updatePasswordUser } from "../db/firebase";
 
 const AuthContext = createContext();
 
@@ -45,6 +36,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signup = async (email, password) => {
+
   try {
     const { user } = await createUser(auth, email, password);
     if (mountedRef.current) {
@@ -91,7 +83,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
-
   useEffect(() => {
     const unsubscribe = onAuthChange(auth, (user) => {
       if (mountedRef.current) {
