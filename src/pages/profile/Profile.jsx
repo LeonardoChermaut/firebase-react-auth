@@ -30,6 +30,7 @@ export const Profile = () => {
     const email = emailRef.current.value.trim();
     const password = passwordRef.current.value.trim();
     const confirmPassword = passwordConfirmRef.current.value.trim();
+    
     const { isValid } = validatePassword(password, confirmPassword);
     if (!isValid) {
       showMessageRequest(PASSWORD_NOT_MATCH_MESSAGE);

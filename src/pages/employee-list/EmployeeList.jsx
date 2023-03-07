@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Lottie from "react-lottie";
-import { Col } from "react-bootstrap";
-import { Button } from "../../components/index";
+import { Button, Modal } from "../../components/index";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { alertConfirmResquest } from "../../utils/utils";
 import loadingLottie from "../../assets/loading-lottie.json";
 import {
@@ -21,11 +21,13 @@ import {
   TitleTableEmployee,
   ContainerTableEmployee,
   FigureImage,
+  Div,
 } from "./Employee.List.styled";
 
 export const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [editingEmployeeId, setEditingEmployeeId] = useState(null);
 
   const fetchEmployees = async () => {
     try {
@@ -48,7 +50,6 @@ export const EmployeeList = () => {
     if (!confirmed) {
       return;
     }
-
     try {
       const employeeRef = document(db, "employee", id);
       await deleteDocument(employeeRef);
@@ -61,6 +62,14 @@ export const EmployeeList = () => {
       showMessageRequest(DELETE_ERROR_MESSAGE);
       console.error(error);
     }
+  };
+
+  const handleEditEmployee = (id) => {
+    setEditingEmployeeId(id);
+  };
+
+  const handleCloseModal = () => {
+    setEditingEmployeeId(null);
   };
 
   useEffect(() => {
@@ -82,17 +91,17 @@ export const EmployeeList = () => {
         ) : (
           <>
             {employees.length > 0 ? (
-              <TableEmployee responsive striped bordered hover variant="dark">
+              <TableEmployee responsive variant="dark" striped>
                 <thead>
                   <tr>
-                    <th>#</th>
+                    <th>ID</th>
                     <th>Foto</th>
                     <th>Nome</th>
                     <th>Email</th>
                     <th>CPF</th>
-                    <th>Data de Contratação</th>
-                    <th>Status</th>
+                    <th>Contratação</th>
                     <th>Endereço</th>
+                    <th>Status</th>
                     <th>Ações</th>
                   </tr>
                 </thead>
@@ -105,43 +114,51 @@ export const EmployeeList = () => {
                           <FigureImage
                             src={employee.photoUrl}
                             alt="Foto do funcionário"
-                            width={100}
-                            height={100}
+                            width={120}
+                            height={90}
                           />
                         )}
                       </td>
-                      <td>{employee.name}</td>
+                      <td><Div>{employee.name}</Div></td>
                       <td>{employee.email}</td>
-                      <td>{employee.cpf}</td>
+                      <td><Div>{employee.cpf}</Div></td>
                       <td>{employee.hiringDate}</td>
-                      <td>{employee.status ? "Ativo" : "Inativo"}</td>
                       <td>
-                        <div>
+                        <Div>
                           {employee.address.street}, {employee.address.number}
-                        </div>
-                        <div>
                           {employee.address.neighborhood},{" "}
                           {employee.address.city} - {employee.address.state}
-                        </div>
-                        <div>CEP: {employee.address.cep}</div>
+                          <br></br>
+                          Cep: {employee.address.cep}
+                          </Div>
                       </td>
-                      <Col>
-                        <Button variant="outline-primary">Editar</Button>
-                        <Button
-                          variant="outline-danger"
-                          onClick={() => handleDeleteEmployee(employee.id)}
-                        >
-                          Excluir
+                       <td>{employee.status ? "Ativo" : "Inativo"}</td>
+                      <td>
+                        <Button variant="outline-primary" onClick={() => handleEditEmployee(employee.id)}>
+                          <FaEdit />
                         </Button>
-                      </Col>
+                        <Button variant="outline-danger" onClick={() => handleDeleteEmployee(employee.id)}>
+                          <FaTrash />
+                        </Button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </TableEmployee>
             ) : (
-              <div>Não há funcionários cadastrados</div>
+              <div className="w-100 text-center mt-2">
+                Não há funcionários cadastrados
+              </div>
             )}
           </>
+        )}
+        {editingEmployeeId && (
+          <Modal
+            employee={employees.find(
+              (employee) => employee.id === editingEmployeeId
+            )}
+            onClose={handleCloseModal}
+          />
         )}
       </ContainerTableEmployee>
     </section>
