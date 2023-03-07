@@ -1,7 +1,25 @@
 import { initializeApp } from "firebase/app";
 import { ref, uploadBytes, getStorage, getDownloadURL } from "firebase/storage";
-import { doc, addDoc, updateDoc, collection, getFirestore, deleteDoc , getDocs } from "firebase/firestore";
-import { getAuth, signOut, updateEmail, updatePassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword,  reauthenticateWithCredential, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  doc,
+  addDoc,
+  updateDoc,
+  collection,
+  getFirestore,
+  deleteDoc,
+  getDocs,
+} from "firebase/firestore";
+import {
+  getAuth,
+  signOut,
+  updateEmail,
+  updatePassword,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  reauthenticateWithCredential,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 const configuration = {
   apiKey: "AIzaSyDUmhD7a60MOudn7XLNQlVymuo4yRfXxHw",
@@ -12,28 +30,25 @@ const configuration = {
   appId: "1:918153009233:web:db289aba2902700c93c070",
 };
 
-const app = initializeApp(configuration);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
-const employeeCollection = collection(db, "employee");
+export const app = initializeApp(configuration);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app);
+export const employeeCollection = collection(db, "employee");
 
-const document = doc;
-const reference = ref;
-const addDocument = addDoc;
-const upload = uploadBytes;
-const signOutUser = signOut;
-const getDocument = getDocs;
-const updateDocUser = updateDoc;
-const getDownload = getDownloadURL;
-const updateEmailUser = updateEmail;
-const onAuthChange = onAuthStateChanged;
-const deleteDocument = deleteDoc;
-const updatePasswordUser = updatePassword;
-const passwordReset = sendPasswordResetEmail;
-const signInUser = signInWithEmailAndPassword;
-const createUser = createUserWithEmailAndPassword;
-const reauthenticate = reauthenticateWithCredential;
-
-export { db, app, auth, upload, storage, document, deleteDocument, reference, signInUser, createUser, addDocument, signOutUser, getDocument, 
- getDownload, onAuthChange, updateDocUser, passwordReset, reauthenticate, updateEmailUser, employeeCollection, updatePasswordUser };
+export const document = doc;
+export const reference = ref;
+export const addDocument = addDoc;
+export const upload = uploadBytes;
+export const signOutUser = signOut;
+export const getDocument = getDocs;
+export const updateDocUser = updateDoc;
+export const getDownload = getDownloadURL;
+export const updateEmailUser = updateEmail;
+export const onAuthChange = onAuthStateChanged;
+export const deleteDocument = deleteDoc;
+export const updatePasswordUser = updatePassword;
+export const passwordReset = sendPasswordResetEmail;
+export const signInUser = signInWithEmailAndPassword;
+export const createUser = createUserWithEmailAndPassword;
+export const reauthenticate = reauthenticateWithCredential;

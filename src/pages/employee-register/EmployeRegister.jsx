@@ -1,9 +1,26 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import { cepMask, cpfMask } from "../../utils/utils";
-import { ButtonSend, ContainerRegisterEmployee, TitleRegister,} from "./Employee.Register.styled";
-import { showMessageRequest, EMPLOYEE_ADD_ERROR_MESSAGE, EMPLOYEE_ADD_SUCCESS_MESSAGE } from "../../utils/index";
-import { storage, upload, document, reference, getDownload, addDocument, updateDocUser, employeeCollection } from "../../db/firebase";
+import {
+  ButtonSend,
+  ContainerRegisterEmployee,
+  TitleRegister,
+} from "./Employee.Register.styled";
+import {
+  showMessageRequest,
+  EMPLOYEE_ADD_ERROR_MESSAGE,
+  EMPLOYEE_ADD_SUCCESS_MESSAGE,
+} from "../../utils/index";
+import {
+  storage,
+  upload,
+  document,
+  reference,
+  getDownload,
+  addDocument,
+  updateDocUser,
+  employeeCollection,
+} from "../../db/firebase";
 
 const INITIAL_EMPLOYEE_VALUE = {
   status: true,
@@ -19,7 +36,7 @@ const INITIAL_EMPLOYEE_VALUE = {
     city: "",
     state: "",
   },
-}
+};
 
 export const EmployeeRegister = () => {
   const [employee, setEmployee] = useState(INITIAL_EMPLOYEE_VALUE);
@@ -36,11 +53,11 @@ export const EmployeeRegister = () => {
         address: employee.address,
         hiringDate: employee.hiringDate,
       });
-  
+
       const photo = reference(storage, `employee/${employeeRef.id}/photo`);
       await upload(photo, employee.photo);
       const photoUrl = await getDownload(photo);
-      
+
       const docRef = document(employeeCollection, employeeRef.id);
       await updateDocUser(docRef, { photoUrl });
       showMessageRequest(EMPLOYEE_ADD_SUCCESS_MESSAGE);
@@ -50,12 +67,11 @@ export const EmployeeRegister = () => {
       console.error(error);
     }
   };
-  
 
   const handleSubmit = (event) => {
     event.preventDefault();
     addEmployee()
-        .then(() => {
+      .then(() => {
         showMessageRequest(EMPLOYEE_ADD_SUCCESS_MESSAGE);
         setEmployee(INITIAL_EMPLOYEE_VALUE);
       })
@@ -78,7 +94,7 @@ export const EmployeeRegister = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setEmployee(prevEmployee => ({
+    setEmployee((prevEmployee) => ({
       ...prevEmployee,
       photo: file,
     }));
@@ -86,20 +102,23 @@ export const EmployeeRegister = () => {
     reader.readAsArrayBuffer(file);
     reader.onloadend = () => {
       const photoBlob = new Blob([reader.result], { type: file.type });
-      setEmployee(prevEmployee => ({
+      setEmployee((prevEmployee) => ({
         ...prevEmployee,
         photo: photoBlob,
       }));
     };
   };
-  
+
   const handleAddressChange = (event) => {
     const { name, value } = event.target;
     const formattedValue = name === "cep" ? cepMask(value) : value;
     setEmployee((prevEmployee) => ({
       ...prevEmployee,
       address: {
-        ...prevEmployee.address, [name]: formattedValue}}));
+        ...prevEmployee.address,
+        [name]: formattedValue,
+      },
+    }));
   };
 
   return (
@@ -209,8 +228,8 @@ export const EmployeeRegister = () => {
           />
         </Form.Group>
         <Form.Group controlId="status">
-        <Form.Label>Situação do Funcionário</Form.Label>
-          <Form.Check 
+          <Form.Label>Situação do Funcionário</Form.Label>
+          <Form.Check
             type="switch"
             label={employee.status ? "Ativo" : "Inativo"}
             name="status"
@@ -219,15 +238,16 @@ export const EmployeeRegister = () => {
           />
         </Form.Group>
         <Form.Group controlId="photo">
-        <Form.Label>Foto</Form.Label>
+          <Form.Label>Foto</Form.Label>
           <Form.Control
             type="file"
             name="photo"
             accept="image/*"
-            onChange={handleFileChange}/>
+            onChange={handleFileChange}
+          />
         </Form.Group>
         <ButtonSend disabled={loading} variant="success" type="submit">
-        {loading ? "Enviando..." : "Enviar"}
+          {loading ? "Enviando..." : "Enviar"}
         </ButtonSend>
       </Form>
     </ContainerRegisterEmployee>

@@ -16,15 +16,8 @@ export const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    return () => {
-      isMountedRef.current = false;
-    };
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       setError("");
       setLoading(true);
@@ -38,6 +31,12 @@ export const Login = () => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   return (
     <section>
@@ -55,7 +54,12 @@ export const Login = () => {
                 <Form.Label>Senha</Form.Label>
                 <Form.Control type="password" ref={passwordRef} required />
               </Form.Group>
-              <Button disabled={loading} className="w-100" type="submit" variant="outline-success">
+              <Button
+                disabled={loading}
+                className="w-100"
+                type="submit"
+                variant="outline-success"
+              >
                 Entrar
               </Button>
             </Form>

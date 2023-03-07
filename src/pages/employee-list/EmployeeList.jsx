@@ -1,44 +1,60 @@
 import React, { useEffect, useState } from "react";
-import Lottie from 'react-lottie';
+import Lottie from "react-lottie";
 import { Col } from "react-bootstrap";
 import { alertConfirmResquest } from "../../utils/utils";
-import loadingLottie  from "../../assets/loading-lottie.json"
-import { employeeCollection, getDocument, deleteDocument, document, db } from "../../db/firebase";
-import { showMessageRequest, DELETE_ERROR_MESSAGE, DELETE_SUCCESS_MESSAGE } from "../../utils/index";
-import { ButtonAction, TableEmployee, TitleTableEmployee, ContainerTableEmployee, FigureImage } from "./Employee.List.styled";
+import loadingLottie from "../../assets/loading-lottie.json";
+import {
+  employeeCollection,
+  getDocument,
+  deleteDocument,
+  document,
+  db,
+} from "../../db/firebase";
+import {
+  showMessageRequest,
+  DELETE_ERROR_MESSAGE,
+  DELETE_SUCCESS_MESSAGE,
+} from "../../utils/index";
+import {
+  ButtonAction,
+  TableEmployee,
+  TitleTableEmployee,
+  ContainerTableEmployee,
+  FigureImage,
+} from "./Employee.List.styled";
 
 export const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const snapshot = await getDocument(employeeCollection);
-        const employees = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setEmployees(employees);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchEmployees();
-  }, []);
+  const fetchEmployees = async () => {
+    try {
+      const snapshot = await getDocument(employeeCollection);
+      const employees = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setEmployees(employees);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleDeleteEmployee = async (id) => {
     const confirmed = await alertConfirmResquest();
     if (!confirmed) {
       return;
     }
+
     try {
       const employeeRef = document(db, "employee", id);
       await deleteDocument(employeeRef);
-      const updatedEmployees = employees.filter((employee) => employee.id !== id);
+      const updatedEmployees = employees.filter(
+        (employee) => employee.id !== id
+      );
       setEmployees(updatedEmployees);
       showMessageRequest(DELETE_SUCCESS_MESSAGE);
     } catch (error) {
@@ -46,6 +62,10 @@ export const EmployeeList = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
 
   return (
     <section>

@@ -4,9 +4,7 @@ import { DivRouters, ContainerRouters } from "./Container.styled";
 export const Container = ({ children }) => {
   return (
     <ContainerRouters>
-      <DivRouters>
-        {children}
-      </DivRouters>
+      <DivRouters>{children}</DivRouters>
     </ContainerRouters>
   );
 };

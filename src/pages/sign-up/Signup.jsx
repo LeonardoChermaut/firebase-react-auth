@@ -3,7 +3,11 @@ import { Container } from "../../components";
 import { useAuth } from "../../contexts/index";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Card, Alert } from "react-bootstrap";
-import { EMAIL_ALREADY, EMAIL_ERROR_MESSAGE, PASSWORD_NOT_MATCH_MESSAGE } from "../../utils/index";
+import {
+  EMAIL_ALREADY,
+  EMAIL_ERROR_MESSAGE,
+  PASSWORD_NOT_MATCH_MESSAGE,
+} from "../../utils/index";
 
 export const Signup = () => {
   const emailRef = useRef();
@@ -16,7 +20,6 @@ export const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       setError(PASSWORD_NOT_MATCH_MESSAGE);
       return;

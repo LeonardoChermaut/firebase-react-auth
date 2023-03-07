@@ -5,8 +5,22 @@ import { FaBars } from "react-icons/fa";
 import { useAuth } from "../../contexts";
 import { AiOutlineClose } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
-import { IoMdPeople, IoIosPaper, IoMdHelpCircle, IoMdLogOut, IoMdHome, IoMdPerson } from "react-icons/io";
-import { SidebarWrap, SidebarLabel, Navbar, SidebarLink, NavIcon, SidebarNav } from "./Sidebar.styled";
+import {
+  IoMdPeople,
+  IoIosPaper,
+  IoMdHelpCircle,
+  IoMdLogOut,
+  IoMdHome,
+  IoMdPerson,
+} from "react-icons/io";
+import {
+  SidebarWrap,
+  SidebarLabel,
+  Navbar,
+  SidebarLink,
+  NavIcon,
+  SidebarNav,
+} from "./Sidebar.styled";
 
 export const Sidebar = () => {
   const { logout } = useAuth();
@@ -53,19 +67,25 @@ export const Sidebar = () => {
             </SidebarLink>
             <SidebarLink href="/perfil" onClick={() => handleSubmenuClick(1)}>
               <div>
-                <CgProfile/> 
+                <CgProfile />
                 <SidebarLabel>Perfil</SidebarLabel>
               </div>
             </SidebarLink>
-            <SidebarLink href="/cadastrar" onClick={() => handleSubmenuClick(2)}>
+            <SidebarLink
+              href="/cadastrar"
+              onClick={() => handleSubmenuClick(2)}
+            >
               <div>
                 <IoMdPeople />
                 <SidebarLabel>Cadastrar</SidebarLabel>
               </div>
             </SidebarLink>
-               <SidebarLink href="/funcionarios" onClick={() => handleSubmenuClick(1)}>
+            <SidebarLink
+              href="/funcionarios"
+              onClick={() => handleSubmenuClick(1)}
+            >
               <div>
-                <IoMdPerson/> 
+                <IoMdPerson />
                 <SidebarLabel>Funcionários</SidebarLabel>
               </div>
             </SidebarLink>

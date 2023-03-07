@@ -3,7 +3,12 @@ import { useAuth } from "../../contexts";
 import { Container } from "../../components";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Card } from "react-bootstrap";
-import { showMessageRequest, PASSWORD_NOT_MATCH_MESSAGE, UPDATED_ERROR_MESSAGE, UPDATED_SUCCSESS_MESSAGE } from "../../utils/index";
+import {
+  showMessageRequest,
+  PASSWORD_NOT_MATCH_MESSAGE,
+  UPDATED_ERROR_MESSAGE,
+  UPDATED_SUCCSESS_MESSAGE,
+} from "../../utils/index";
 
 export const Profile = () => {
   const history = useHistory();
@@ -12,7 +17,6 @@ export const Profile = () => {
   const passwordConfirmRef = useRef();
   const [loading, setLoading] = useState(false);
   const { currentUser, updateUserCredentials } = useAuth();
-  
 
   const validatePassword = (password, confirmPassword) => {
     if (password !== confirmPassword) {
@@ -28,7 +32,7 @@ export const Profile = () => {
     const confirmPassword = passwordConfirmRef.current.value.trim();
     const { isValid } = validatePassword(password, confirmPassword);
     if (!isValid) {
-      showMessageRequest(PASSWORD_NOT_MATCH_MESSAGE)
+      showMessageRequest(PASSWORD_NOT_MATCH_MESSAGE);
       return;
     }
     if (email === currentUser.email && !password) {
@@ -83,7 +87,12 @@ export const Profile = () => {
                   placeholder="********"
                 />
               </Form.Group>
-              <Button disabled={loading} className="w-100" type="submit" variant="outline-primary">
+              <Button
+                disabled={loading}
+                className="w-100"
+                type="submit"
+                variant="outline-primary"
+              >
                 Atualizar
               </Button>
             </Form>
