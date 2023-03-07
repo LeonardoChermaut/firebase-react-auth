@@ -1,3 +1,4 @@
+
 export const schemaSwal = {
   title: "Realmente deseja continuar?",
   text: "Essa ação será irreversível",
@@ -27,3 +28,4 @@ export const schemaAlert = {
   cancelButtonText: "Não, cancelar!",
   reverseButtons: true,
 };
+

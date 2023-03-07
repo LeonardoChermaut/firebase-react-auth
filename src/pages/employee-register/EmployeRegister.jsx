@@ -130,10 +130,12 @@ export const EmployeeRegister = () => {
           <Form.Control
             type="text"
             name="name"
+            minLength={5}
             maxLength={30}
             value={employee.name}
-            placeholder="Leonardo Chermaut"
+            placeholder="Digite seu nome"
             onChange={handleInputChange}
+            required
           />
         </Form.Group>
 
@@ -142,10 +144,12 @@ export const EmployeeRegister = () => {
           <Form.Control
             type="email"
             name="email"
+            minLength={10}
             maxLength={50}
             value={employee.email}
-            placeholder="leonardochermaut.jobs@gmail.com"
+            placeholder="Digite seu melhor email"
             onChange={handleInputChange}
+            required
           />
         </Form.Group>
         <Form.Group controlId="cpf">
@@ -153,10 +157,12 @@ export const EmployeeRegister = () => {
           <Form.Control
             type="text"
             name="cpf"
+            minLength={14}
             maxLength={14}
             value={employee.cpf}
-            placeholder="165.547.952-47"
+            placeholder="Digite seu CPF"
             onChange={handleInputChange}
+            required
           />
         </Form.Group>
 
@@ -167,6 +173,7 @@ export const EmployeeRegister = () => {
             name="hiringDate"
             value={employee.hiringDate}
             onChange={handleInputChange}
+            required
           />
         </Form.Group>
 
@@ -175,10 +182,12 @@ export const EmployeeRegister = () => {
           <Form.Control
             type="text"
             name="cep"
+            minLength={9}
             maxLength={9}
-            placeholder="25965-265"
+            placeholder="Digite seu CEP"
             value={employee.address.cep}
             onChange={handleAddressChange}
+            required
           />
         </Form.Group>
         <Form.Group controlId="address.city">
@@ -187,9 +196,10 @@ export const EmployeeRegister = () => {
             type="text"
             name="city"
             maxLength={30}
-            placeholder="Teresópolis"
+            placeholder="Digite sua cidade"
             value={employee.address.city}
             onChange={handleAddressChange}
+            required
           />
         </Form.Group>
         <Form.Group controlId="address.street">
@@ -199,8 +209,9 @@ export const EmployeeRegister = () => {
             name="street"
             maxLength={50}
             value={employee.address.street}
-            placeholder="Rua Marcos Salles Canano, 221"
             onChange={handleAddressChange}
+            placeholder="Digite o nome da rua e o número"
+            required
           />
         </Form.Group>
 
@@ -210,9 +221,10 @@ export const EmployeeRegister = () => {
             type="text"
             maxLength={30}
             name="neighborhood"
-            placeholder="Vila Muqui"
+            placeholder="Digite o nome do seu bairro"
             value={employee.address.neighborhood}
             onChange={handleAddressChange}
+            required
           />
         </Form.Group>
 
@@ -222,9 +234,10 @@ export const EmployeeRegister = () => {
             type="text"
             name="state"
             maxLength={2}
-            placeholder="RJ"
+            placeholder="Digite a sigla do seu estado"
             value={employee.address.state}
             onChange={handleAddressChange}
+            required
           />
         </Form.Group>
         <Form.Group controlId="status">
@@ -244,6 +257,7 @@ export const EmployeeRegister = () => {
             name="photo"
             accept="image/*"
             onChange={handleFileChange}
+            required
           />
         </Form.Group>
         <ButtonSend disabled={loading} variant="success" type="submit">
