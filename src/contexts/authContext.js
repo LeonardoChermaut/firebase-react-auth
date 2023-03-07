@@ -25,6 +25,7 @@ import {
   updatePasswordUser,
 } from "../db/firebase";
 import { useHistory } from "react-router-dom";
+import { showMessageTimerRequest } from "../utils/utils";
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -41,6 +42,7 @@ export const AuthProvider = ({ children }) => {
       if (mountedRef.current) {
         setCurrentUser(user);
       }
+      showMessageTimerRequest()
     } catch (error) {
       if (error.code === USER_NOT_FOUND) {
         showMessageRequest(USER_NOT_FOUND_MESSAGE).then(() => {

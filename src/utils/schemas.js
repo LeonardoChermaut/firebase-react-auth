@@ -1,4 +1,3 @@
-
 export const schemaSwal = {
   title: "Realmente deseja continuar?",
   text: "Essa ação será irreversível",
@@ -19,6 +18,16 @@ export const schemaSettings = {
   timer: 1500,
 };
 
+export const schemaAlertTimer = {
+  title: "Bem-vindo!",
+  position: "top-end",
+  text: "Que bom te ver novamente",
+  timer: 2000,
+  timerProgressBar: true,
+  showConfirmButton: false,
+  icon: "success",
+};
+
 export const schemaAlert = {
   title: "Deseja prosseguir?",
   text: "Essa ação será irreversível",
@@ -28,4 +37,3 @@ export const schemaAlert = {
   cancelButtonText: "Não, cancelar!",
   reverseButtons: true,
 };
-

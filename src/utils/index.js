@@ -19,4 +19,9 @@ export {
   RESET_PASSWORD_ERROR_MESSAGE,
 } from "./messages";
 export { cpfMask, cepMask, showMessageRequest } from "./utils";
-export { schemaSwal, schemaAlert, schemaSettings } from "./schemas";
+export {
+  schemaSwal,
+  schemaAlert,
+  schemaSettings,
+  schemaAlertTimer,
+} from "./schemas";

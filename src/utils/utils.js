@@ -1,5 +1,11 @@
 import Swal from "sweetalert2";
-import { GLOBAL_ERROR_MESSAGE, schemaAlert, schemaSettings, schemaSwal } from "./index";
+import {
+  schemaSwal,
+  schemaAlert,
+  schemaSettings,
+  schemaAlertTimer,
+  GLOBAL_ERROR_MESSAGE,
+} from "./index";
 
 export const cpfMask = (value) => {
   return value
@@ -25,3 +31,6 @@ export const alertConfirmResquest = async () => {
   return isConfirmed;
 };
 
+export const showMessageTimerRequest = () => {
+  return Swal.fire(schemaAlertTimer);
+};
