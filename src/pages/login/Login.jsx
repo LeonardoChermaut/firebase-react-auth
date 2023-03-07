@@ -5,7 +5,8 @@ import { CardLoginPage, ImageLogo } from "./Login.styled";
 import { Link, useHistory } from "react-router-dom";
 import logoLogin from "../../assets/logo-login.jpg";
 import { LOGIN_ERROR_MESSAGE } from "../../utils/messages";
-import { Form, Button, Card, Alert } from "react-bootstrap";
+import { Form, Card, Alert } from "react-bootstrap";
+import { Button } from "../../components/button/Button";
 
 export const Login = () => {
   const { login } = useAuth();
@@ -63,7 +64,6 @@ export const Login = () => {
               </Form.Group>
               <Button
                 disabled={loading}
-                className="w-100"
                 type="submit"
                 variant="outline-success"
               >

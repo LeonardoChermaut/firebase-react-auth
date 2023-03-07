@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Lottie from "react-lottie";
 import { Col } from "react-bootstrap";
+import { Button } from "../../components/index";
 import { alertConfirmResquest } from "../../utils/utils";
 import loadingLottie from "../../assets/loading-lottie.json";
 import {
@@ -16,7 +17,6 @@ import {
   DELETE_SUCCESS_MESSAGE,
 } from "../../utils/index";
 import {
-  ButtonAction,
   TableEmployee,
   TitleTableEmployee,
   ContainerTableEmployee,
@@ -126,16 +126,13 @@ export const EmployeeList = () => {
                         <div>CEP: {employee.address.cep}</div>
                       </td>
                       <Col>
-                        <ButtonAction size="sm" variant="outline-primary">
-                          Editar
-                        </ButtonAction>
-                        <ButtonAction
-                          size="sm"
+                        <Button variant="outline-primary">Editar</Button>
+                        <Button
                           variant="outline-danger"
                           onClick={() => handleDeleteEmployee(employee.id)}
                         >
                           Excluir
-                        </ButtonAction>
+                        </Button>
                       </Col>
                     </tr>
                   ))}

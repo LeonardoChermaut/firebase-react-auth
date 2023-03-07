@@ -2,12 +2,13 @@ import React, { useRef, useState } from "react";
 import { Container } from "../../components";
 import { useAuth } from "../../contexts/index";
 import { Link, useHistory } from "react-router-dom";
-import { Form, Button, Card, Alert } from "react-bootstrap";
+import { Form, Card, Alert } from "react-bootstrap";
 import {
   EMAIL_ALREADY,
   EMAIL_ERROR_MESSAGE,
   PASSWORD_NOT_MATCH_MESSAGE,
 } from "../../utils/index";
+import { Button } from "../../components/index";
 
 export const Signup = () => {
   const emailRef = useRef();
@@ -66,7 +67,7 @@ export const Signup = () => {
                   required
                 />
               </Form.Group>
-              <Button disabled={loading} className="w-100" type="submit">
+              <Button disabled={loading} variant="outline-success" type="submit">
                 {loading ? "Registrando..." : "Registre-se"}
               </Button>
             </Form>

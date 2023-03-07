@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Container, Button } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 
 export const ContainerRegisterEmployee = styled(Container)`
 width: 50%;
@@ -12,10 +12,6 @@ width: 50%;
   @media (max-width: 756px) {
       width: 100%;
   }
-`;
-
-export const ButtonSend = styled(Button)`
-  width: 100%;
 `;
 
 export const TitleRegister = styled.h1`

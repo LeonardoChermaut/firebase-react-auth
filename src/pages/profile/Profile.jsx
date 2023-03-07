@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
 import { useAuth } from "../../contexts";
-import { Container } from "../../components";
+import { Button, Container } from "../../components";
 import { Link, useHistory } from "react-router-dom";
-import { Form, Button, Card } from "react-bootstrap";
+import { Form, Card } from "react-bootstrap";
 import {
   showMessageRequest,
   PASSWORD_NOT_MATCH_MESSAGE,
@@ -89,18 +89,17 @@ export const Profile = () => {
               </Form.Group>
               <Button
                 disabled={loading}
-                className="w-100"
                 type="submit"
                 variant="outline-primary"
               >
                 Atualizar
               </Button>
+              <div className="w-100 text-center mt-2">
+                <Link to="/inicio">Cancelar</Link>
+              </div>
             </Form>
           </Card.Body>
         </Card>
-        <div className="w-100 text-center mt-2">
-          <Link to="/inicio">Cancelar</Link>
-        </div>
       </Container>
     </section>
   );
