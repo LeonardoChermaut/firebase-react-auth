@@ -1,8 +1,30 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from "react";
-import { showMessageRequest, EMAIL_ALREADY, EMAIL_ERROR_MESSAGE , PASSWORD_WEAK_ERROR_MESSAGE, PASSWORD_WEAK, USER_NOT_FOUND, USER_NOT_FOUND_MESSAGE  } from "../utils/index";
-import { auth, createUser, signOutUser, signInUser, passwordReset, onAuthChange, updateEmailUser, updatePasswordUser } from "../db/firebase";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
+import {
+  showMessageRequest,
+  EMAIL_ALREADY,
+  EMAIL_ERROR_MESSAGE,
+  PASSWORD_WEAK_ERROR_MESSAGE,
+  PASSWORD_WEAK,
+  USER_NOT_FOUND,
+  USER_NOT_FOUND_MESSAGE,
+} from "../utils/index";
+import {
+  auth,
+  createUser,
+  signOutUser,
+  signInUser,
+  passwordReset,
+  onAuthChange,
+  updateEmailUser,
+  updatePasswordUser,
+} from "../db/firebase";
 import { useHistory } from "react-router-dom";
-
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -22,7 +44,6 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       if (error.code === USER_NOT_FOUND) {
         showMessageRequest(USER_NOT_FOUND_MESSAGE).then(() => {
-          setCurrentUser(null);
           history.push("/login");
         });
       } else {
@@ -31,6 +52,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
   };
+
   const logout = async () => {
     try {
       await signOutUser(auth);
@@ -81,7 +103,6 @@ export const AuthProvider = ({ children }) => {
       if (password) {
         await updatePasswordUser(authentication, password);
       }
-
       setCurrentUser((prevUser) => ({ ...prevUser, email }));
     } catch (error) {
       showMessageRequest();
@@ -89,29 +110,32 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const unsubscribe = onAuthChange(auth, (user) => {
+    if (mountedRef.current) {
+      setCurrentUser(user);
+      setLoading(false);
+    }
+  });
+
   useEffect(() => {
-    const unsubscribe = onAuthChange(auth, (user) => {
-      if (mountedRef.current) {
-        setCurrentUser(user);
-        setLoading(false);
-      }
-    });
     return () => {
       mountedRef.current = false;
       unsubscribe();
     };
-  }, []);
+  }, [unsubscribe]);
+
+  const isAuthenticated = () => !!currentUser;
 
   const authContextValue = {
     currentUser,
-    isAuthenticated: !!currentUser,
+    isAuthenticated,
     login,
     signup,
     logout,
     resetPassword,
-    updateUserCredentials,
+    updateUserCredentials
   };
-  
+
   return (
     <AuthContext.Provider value={authContextValue}>
       {!loading && children}

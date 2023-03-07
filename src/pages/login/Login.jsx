@@ -16,14 +16,21 @@ export const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const isMounted = (param) => {
+    return param ? (isMountedRef.current = param) : isMountedRef.current;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+
     try {
       setError("");
       setLoading(true);
-      await login(emailRef.current.value, passwordRef.current.value);
-      if (isMountedRef.current) {
-        history.push("/");
+      await login(email, password);
+      if (isMounted) {
+        history.push("/inicio");
       }
     } catch (error) {
       setError(LOGIN_ERROR_MESSAGE);
@@ -34,7 +41,7 @@ export const Login = () => {
 
   useEffect(() => {
     return () => {
-      isMountedRef.current = false;
+      isMounted(false);
     };
   }, []);
 
