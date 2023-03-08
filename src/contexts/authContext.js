@@ -27,7 +27,7 @@ import {
   updateEmailUser,
   updatePasswordUser,
 } from "../db/firebase";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect} from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(user);
       }
       showMessageWelcome();
-      history.replace("/inicio");
+       return <Redirect to="/inicio" />;
     } catch (error) {
       if (error.code === USER_NOT_FOUND) {
         showMessageRequest(USER_NOT_FOUND_MESSAGE).then(() => {
