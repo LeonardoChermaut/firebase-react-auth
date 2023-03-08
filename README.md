@@ -2,7 +2,7 @@
 # Projeto Fire Flit
 
 # Detalhes do projeto
-- O projeto conta com integração e consumo de rescursos através do banco não relacional (Firebase). Com propósito de ir além de um simples CRUD. Tendo a possibilidade de manusear e administrar as informações dos funcionários cadastrados.
+- Este é meu primeiro projeto com integração e consumo de rescursos através do banco não relacional (Firebase). Com propósito de ir além de um simples CRUD. Tendo a possibilidade de manusear e administrar as suas próprias informações e dos funcionários.
 
 ## Funcionalidades
 - Criação da conta.
@@ -13,6 +13,7 @@
 - Log de mudança após a senha alterada; 
 - INSERT, DELETE, UPDATE, GET de funcionários.
 - Context para autenticação 
+- Mascáras regex para os formulários de registro
 
 ## FAQ
 
@@ -45,7 +46,8 @@ ou
  yarn start
 ```
 
-#### Como rodar os testes?
+#### Caso eu queira, como posso rodar os testes?
+Você pode rodar os testes através dos comandos
 
 ```bash
   npm run test
@@ -62,10 +64,9 @@ O projeto pode ser utilizado com sua API_KEY, desde que esteja configurado dentr
 
 ## Stacks utilizadas
 
-**Front-end:** React, HTML, CSS, StyledComponents, SweetAlert
+**Front-end:** React, HTML, CSS, StyledComponents, SweetAlert, Bootstrap
 
 **Banco de dados:** Firebase.
-
 
 ## Suporte
 Para suporte, mande um email para leonardochermaut.jobs@gmail.com.
