@@ -5,13 +5,10 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { alertConfirmResquest } from "../../utils/utils";
 import loadingLottie from "../../assets/loading-lottie.json";
 import {
-  employeeCollection,
-  getDocument,
-  deleteDocument,
-  document,
-  db,
-  updateDocUser,
-} from "../../db/firebase";
+  deleteEmployeeService,
+  getEmployeeService,
+  updateEmployeeService,
+} from "../../services";
 import {
   showMessageRequest,
   DELETE_ERROR_MESSAGE,
@@ -31,34 +28,18 @@ export const EmployeeList = () => {
   const [editingEmployeeId, setEditingEmployeeId] = useState(null);
   const editingEmployee = useRef(null);
 
-  const fetchEmployees = async () => {
-    try {
-      const snapshot = await getDocument(employeeCollection);
-      const employees = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setEmployees(employees);
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleUpdateEmployee = async (updatedEmployee) => {
-    try {
-      const employeeRef = document(db, "employee", updatedEmployee.id);
-      await updateDocUser(employeeRef, updatedEmployee);
-      const updatedEmployees = employees.map((employee) => employee.id === updatedEmployee.id ? updatedEmployee : employee);
+    const result = await updateEmployeeService(updatedEmployee);
+    if (result.success) {
+      const updatedEmployees = employees.map((employee) =>
+        employee.id === updatedEmployee.id ? updatedEmployee : employee
+      );
       setEmployees(updatedEmployees);
       editingEmployee.current = null;
       setEditingEmployeeId(null);
       showMessageRequest("Funcionário atualizado com sucesso");
-    } catch (error) {
+    } else {
       showMessageRequest("Erro ao atualizar funcionário");
-      console.error(error);
     }
   };
 
@@ -78,23 +59,24 @@ export const EmployeeList = () => {
     if (!confirmed) {
       return;
     }
-    try {
-      const employeeRef = document(db, "employee", id);
-      await deleteDocument(employeeRef);
+    const result = await deleteEmployeeService(id);
+    if (result.success) {
       const updatedEmployees = employees.filter(
         (employee) => employee.id !== id
       );
       setEmployees(updatedEmployees);
       showMessageRequest(DELETE_SUCCESS_MESSAGE);
-    } catch (error) {
-      showMessageRequest(DELETE_ERROR_MESSAGE);
-      console.error(error);
+    } else {
+      showMessageRequest(result.message || DELETE_ERROR_MESSAGE);
     }
   };
 
   useEffect(() => {
+    const fetchEmployees = async () => {
+      await getEmployeeService(setEmployees, setIsLoading);
+    };
     fetchEmployees();
-  });
+  }, []);
 
   return (
     <section>

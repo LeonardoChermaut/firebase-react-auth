@@ -9,17 +9,8 @@ import {
   EMPLOYEE_ADD_ERROR_MESSAGE,
   EMPLOYEE_ADD_SUCCESS_MESSAGE,
 } from "../../utils/index";
-import {
-  storage,
-  upload,
-  document,
-  reference,
-  getDownload,
-  addDocument,
-  updateDocUser,
-  employeeCollection,
-} from "../../db/firebase";
 import { Form as EmployeeForm } from "../../components/form/Form";
+import { createEmployeeService } from "../../services";
 
 const INITIAL_EMPLOYEE_VALUE = {
   status: true,
@@ -41,43 +32,20 @@ export const EmployeeRegister = () => {
   const [employee, setEmployee] = useState(INITIAL_EMPLOYEE_VALUE);
   const [loading, setLoading] = useState(false);
 
-  const addEmployee = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setLoading(true);
+
     try {
-      const employeeRef = await addDocument(employeeCollection, {
-        cpf: employee.cpf,
-        name: employee.name,
-        email: employee.email,
-        status: employee.status,
-        address: employee.address,
-        hiringDate: employee.hiringDate,
-      });
-
-      const photo = reference(storage, `employee/${employeeRef.id}/photo`);
-      await upload(photo, employee.photo);
-      const photoUrl = await getDownload(photo);
-
-      const docRef = document(employeeCollection, employeeRef.id);
-      await updateDocUser(docRef, { photoUrl });
+      await createEmployeeService(employee, setLoading);
       showMessageRequest(EMPLOYEE_ADD_SUCCESS_MESSAGE);
-      setLoading(false);
+      setEmployee(INITIAL_EMPLOYEE_VALUE);
     } catch (error) {
       showMessageRequest(EMPLOYEE_ADD_ERROR_MESSAGE);
       console.error(error);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    addEmployee()
-      .then(() => {
-        showMessageRequest(EMPLOYEE_ADD_SUCCESS_MESSAGE);
-        setEmployee(INITIAL_EMPLOYEE_VALUE);
-      })
-      .catch((error) => {
-        showMessageRequest(EMPLOYEE_ADD_ERROR_MESSAGE);
-        console.error(error);
-      });
   };
 
   const handleInputChange = (event) => {
