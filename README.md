@@ -2,12 +2,7 @@
 # Projeto Fire Flit
 
 # Detalhes do projeto
-- O projeto conta com integração e consumo de rescursos através do banco não relacional (Firebase).
-- Neste projeto o intuito é ir além de um simples CRUD. 
-- Criação da conta
-- Recuperação de senha, caso haja acesso ao email cadastrado;
-- Log de mudança após a senha alterada; 
-- Atualização da credencial de login e-mail e senha.
+- O projeto conta com integração e consumo de rescursos através do banco não relacional (Firebase). Com propósito de ir além de um simples CRUD. Tendo a possibilidade de manusear e administrar as informações dos funcionários cadastrados.
 
 ## Funcionalidades
 - Criação da conta.
@@ -15,6 +10,7 @@
 - Recuperação de senha via email cadastrado.
 - Atualização da credencial de login e-mail e senha.
 - Email com log de mudança.
+- Log de mudança após a senha alterada; 
 - INSERT, DELETE, UPDATE, GET de funcionários.
 - Context para autenticação 
 
