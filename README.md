@@ -45,7 +45,7 @@ ou
  yarn start
 ```
 
-####  Como rodar os testes?
+#### Como rodar os testes?
 
 ```bash
   npm run test
@@ -56,12 +56,15 @@ ou
   yarn run test
 ```
 
-## Stacks utilizadas
-**Front-end:** React, HTML, CSS, StyledComponents, SweetAlert.
-**Banco de dados:** Firebase.
-
-## Variáveis de Ambiente
+#### Variáveis de Ambiente
 O projeto pode ser utilizado com sua API_KEY, desde que esteja configurado dentro do arquivo .env que fica na pasta src.
+
+
+## Stacks utilizadas
+
+**Front-end:** React, HTML, CSS, StyledComponents, SweetAlert
+
+**Banco de dados:** Firebase.
 
 
 ## Suporte
