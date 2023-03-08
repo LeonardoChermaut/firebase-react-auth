@@ -35,7 +35,6 @@ export const EmployeeRegister = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-
     try {
       await createEmployeeService(employee, setLoading);
       showMessageRequest(EMPLOYEE_ADD_SUCCESS_MESSAGE);

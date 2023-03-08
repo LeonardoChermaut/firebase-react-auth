@@ -61,9 +61,7 @@ export const EmployeeList = () => {
     }
     const result = await deleteEmployeeService(id);
     if (result.success) {
-      const updatedEmployees = employees.filter(
-        (employee) => employee.id !== id
-      );
+      const updatedEmployees = employees.filter((employee) => employee.id !== id);
       setEmployees(updatedEmployees);
       showMessageRequest(DELETE_SUCCESS_MESSAGE);
     } else {
@@ -116,7 +114,7 @@ export const EmployeeList = () => {
                           <FigureImage
                             src={employee.photoUrl}
                             alt="Foto do funcionário"
-                            width={120}
+                            width={100}
                             height={90}
                           />
                         )}

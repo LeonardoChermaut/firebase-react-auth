@@ -22,7 +22,7 @@ export const cepMask = (value) => {
 
 export const showMessageRequest = (param) => {
   const message = param || GLOBAL_ERROR_MESSAGE;
-  return Swal.fire(schemaSettings.title(message), schemaSettings);
+  return Swal.fire(schemaSettings, schemaSettings.title(message));
 };
 
 export const alertConfirmResquest = async () => {

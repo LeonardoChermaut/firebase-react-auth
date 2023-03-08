@@ -7,6 +7,7 @@ import {
   EMAIL_ALREADY,
   EMAIL_ERROR_MESSAGE,
   PASSWORD_NOT_MATCH_MESSAGE,
+  showMessageRequest,
 } from "../../utils/index";
 import { Button } from "../../components/index";
 
@@ -21,33 +22,26 @@ export const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    const email = emailRef.current.value;
     const password = passwordRef.current.value;
-    const passwordConfirm = passwordConfirmRef.current.value;
+    const passwordConfirmed = passwordConfirmRef.current.value
 
-    if (password !== passwordConfirm) {
+    if (password !== passwordConfirmed) {
       setError(PASSWORD_NOT_MATCH_MESSAGE);
       return;
     }
     setLoading(true);
     setError("");
-    try {
-      const result = await signup(emailRef.current.value, password);
-      if (result.error) {
-        if (result.error === EMAIL_ALREADY) {
-          setError(EMAIL_ERROR_MESSAGE);
-        } else {
-          setError(result.error);
-        }
-      } else {
-        history.push("/");
-      }
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
+    const result = await signup(email, password);
+    setLoading(false);
+      if (result.error === EMAIL_ALREADY) {
+        showMessageRequest(EMAIL_ERROR_MESSAGE);
+        window.location.reload();
+    } else {
+      history.push("/");
     }
   };
-  
+
   return (
     <section>
       <Container>
@@ -72,11 +66,7 @@ export const Signup = () => {
                   required
                 />
               </Form.Group>
-              <Button
-                disabled={loading}
-                variant="outline-success"
-                type="submit"
-              >
+              <Button disabled={loading} variant="outline-success" type="submit">
                 {loading ? "Registrando..." : "Registre-se"}
               </Button>
             </Form>

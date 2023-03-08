@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(user);
       }
       showMessageWelcome();
+      history.push("/inicio")
     } catch (error) {
       if (error.code === USER_NOT_FOUND) {
         showMessageRequest(USER_NOT_FOUND_MESSAGE).then(() => {
@@ -83,10 +84,9 @@ export const AuthProvider = ({ children }) => {
       }
       if (error.code === PASSWORD_WEAK) {
         showMessageRequest(PASSWORD_WEAK_ERROR_MESSAGE);
-      } else {
-        showMessageRequest();
-        console.error(error);
       }
+      console.error(error);
+      return;
     }
   };
 
