@@ -27,7 +27,7 @@ import {
   updateEmailUser,
   updatePasswordUser,
 } from "../db/firebase";
-import { useHistory, Redirect} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(user);
       }
       showMessageWelcome();
-       return <Redirect to="/inicio" />;
+      return true;
     } catch (error) {
       if (error.code === USER_NOT_FOUND) {
         showMessageRequest(USER_NOT_FOUND_MESSAGE).then(() => {
@@ -56,6 +56,7 @@ export const AuthProvider = ({ children }) => {
         showMessageRequest(GLOBAL_ERROR_MESSAGE, "error");
         console.error(error);
       }
+      return false;
     }
   };
 
@@ -81,10 +82,14 @@ export const AuthProvider = ({ children }) => {
       history.replace("/login");
     } catch (error) {
       if (error.code === EMAIL_ALREADY) {
-        showMessageRequest(EMAIL_ERROR_MESSAGE, "error").then(() => window.location.reload());
+        showMessageRequest(EMAIL_ERROR_MESSAGE, "error").then(() =>
+          window.location.reload()
+        );
       }
       if (error.code === PASSWORD_WEAK) {
-        showMessageRequest(PASSWORD_WEAK_ERROR_MESSAGE, "error").then(() => window.location.reload());
+        showMessageRequest(PASSWORD_WEAK_ERROR_MESSAGE, "error").then(() =>
+          window.location.reload()
+        );
       }
       console.error(error);
     }

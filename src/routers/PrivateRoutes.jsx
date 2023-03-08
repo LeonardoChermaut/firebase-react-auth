@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { Route, useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
 import { PrivateLayout } from "./PrivateLayout";
 
@@ -18,23 +17,16 @@ export const PrivateRoutes = ({ component: Component, ...rest }) => {
       }
     };
     checkAuthentication();
-    return () => {
-      setIsUserAuthenticated(false);
-    };
+    return () => setIsUserAuthenticated(false);
   }, [isAuthenticated, history]);
 
-  if (!isUserAuthenticated) {
-    return null;
-  }
-
   return (
-    <Route
-      {...rest}
-      render={(props) => (
+    <Route {...rest}>
+      {isUserAuthenticated && (
         <PrivateLayout>
-          <Component {...props} />
+          <Component />
         </PrivateLayout>
       )}
-    />
+    </Route>
   );
 };

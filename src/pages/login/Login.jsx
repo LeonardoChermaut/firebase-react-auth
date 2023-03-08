@@ -25,12 +25,11 @@ export const Login = () => {
     e.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-
     try {
       setError("");
       setLoading(true);
-      await login(email, password);
-      if (isMounted) {
+      const loginSuccess = await login(email, password);
+      if (isMounted && loginSuccess) {
         history.push("/inicio");
       }
     } catch (error) {
