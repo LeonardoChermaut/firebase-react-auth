@@ -5,12 +5,14 @@ import { Sidebar } from "../components/sidebar/Sidebar";
 export const PrivateLayout = ({ children }) => {
   const { isAuthenticated } = useAuth();
 
-  if (!isAuthenticated) return null;
+  if (isAuthenticated) {
+    return (
+      <>
+        <Sidebar />
+        {children}
+      </>
+    );
+  }
 
-  return (
-    <>
-      <Sidebar />
-      {children}
-    </>
-  );
+  return children;
 };
