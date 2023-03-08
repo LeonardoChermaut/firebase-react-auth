@@ -15,6 +15,7 @@ import {
   USER_NOT_FOUND,
   USER_NOT_FOUND_MESSAGE,
   USER_SUCCESS_REGISTER_MESSAGE,
+  GLOBAL_ERROR_MESSAGE,
 } from "../utils/index";
 import {
   auth,
@@ -45,14 +46,14 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(user);
       }
       showMessageWelcome();
-      history.push("/inicio")
+      history.push("/inicio");
     } catch (error) {
       if (error.code === USER_NOT_FOUND) {
         showMessageRequest(USER_NOT_FOUND_MESSAGE).then(() => {
           history.push("/login");
         });
       } else {
-        showMessageRequest();
+        showMessageRequest(GLOBAL_ERROR_MESSAGE, "error");
         console.error(error);
       }
     }
@@ -65,7 +66,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(null);
       }
     } catch (error) {
-      showMessageRequest();
+      showMessageRequest(GLOBAL_ERROR_MESSAGE, "error");
       console.error(error);
     }
   };
@@ -80,13 +81,12 @@ export const AuthProvider = ({ children }) => {
       history.replace("/login");
     } catch (error) {
       if (error.code === EMAIL_ALREADY) {
-        showMessageRequest(EMAIL_ERROR_MESSAGE);
+        showMessageRequest(EMAIL_ERROR_MESSAGE, "error").then(() => window.location.reload());
       }
       if (error.code === PASSWORD_WEAK) {
-        showMessageRequest(PASSWORD_WEAK_ERROR_MESSAGE);
+        showMessageRequest(PASSWORD_WEAK_ERROR_MESSAGE, "error").then(() => window.location.reload());
       }
       console.error(error);
-      return;
     }
   };
 
@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await passwordReset(email);
     } catch (error) {
-      showMessageRequest();
+      showMessageRequest(GLOBAL_ERROR_MESSAGE, "error");
       console.error(error);
     }
   };
@@ -111,7 +111,7 @@ export const AuthProvider = ({ children }) => {
       }
       setCurrentUser((prevUser) => ({ ...prevUser, email }));
     } catch (error) {
-      showMessageRequest();
+      showMessageRequest(GLOBAL_ERROR_MESSAGE, "error");
       console.error(error);
     }
   };

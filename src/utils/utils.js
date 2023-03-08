@@ -20,9 +20,13 @@ export const cepMask = (value) => {
   return value.replace(/\D/g, "").replace(/(\d{5})(\d)/, "$1-$2");
 };
 
-export const showMessageRequest = (param) => {
-  const message = param || GLOBAL_ERROR_MESSAGE;
-  return Swal.fire(schemaSettings, schemaSettings.title(message));
+export const showMessageRequest = (title, icon) => {
+  const settings = {
+    ...schemaSettings,
+    icon: icon || "success",
+    title: title || GLOBAL_ERROR_MESSAGE,
+  };
+  return Swal.fire(settings);
 };
 
 export const alertConfirmResquest = async () => {

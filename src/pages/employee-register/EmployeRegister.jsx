@@ -40,7 +40,7 @@ export const EmployeeRegister = () => {
       showMessageRequest(EMPLOYEE_ADD_SUCCESS_MESSAGE);
       setEmployee(INITIAL_EMPLOYEE_VALUE);
     } catch (error) {
-      showMessageRequest(EMPLOYEE_ADD_ERROR_MESSAGE);
+      showMessageRequest(EMPLOYEE_ADD_ERROR_MESSAGE, "error");
       console.error(error);
     } finally {
       setLoading(false);

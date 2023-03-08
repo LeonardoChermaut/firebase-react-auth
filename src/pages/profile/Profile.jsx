@@ -33,11 +33,11 @@ export const Profile = () => {
     
     const { isValid } = validatePassword(password, confirmPassword);
     if (!isValid) {
-      showMessageRequest(PASSWORD_NOT_MATCH_MESSAGE);
+      showMessageRequest(PASSWORD_NOT_MATCH_MESSAGE, "error");
       return;
     }
     if (email === currentUser.email && !password) {
-      showMessageRequest(UPDATED_ERROR_MESSAGE);
+      showMessageRequest(UPDATED_ERROR_MESSAGE, "error");
       return;
     }
 
@@ -49,7 +49,7 @@ export const Profile = () => {
       showMessageRequest(UPDATED_SUCCSESS_MESSAGE);
       history.push("/");
     } catch (error) {
-      showMessageRequest(UPDATED_ERROR_MESSAGE);
+      showMessageRequest(UPDATED_ERROR_MESSAGE, "error");
       console.error(error);
     } finally {
       setLoading(false);

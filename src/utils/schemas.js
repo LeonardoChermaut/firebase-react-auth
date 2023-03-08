@@ -10,6 +10,9 @@ export const schemaSwal = {
 
 export const schemaSettings = {
   position: "top-end",
+  icon: (type) => {
+    return `${type}`;
+  },
   title: (message) => {
     return `${message}`;
   },

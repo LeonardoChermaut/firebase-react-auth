@@ -13,6 +13,8 @@ import {
   showMessageRequest,
   DELETE_ERROR_MESSAGE,
   DELETE_SUCCESS_MESSAGE,
+  UPDATED_ERROR_MESSAGE,
+  UPDATED_SUCCSESS_MESSAGE,
 } from "../../utils/index";
 import {
   TableEmployee,
@@ -37,9 +39,9 @@ export const EmployeeList = () => {
       setEmployees(updatedEmployees);
       editingEmployee.current = null;
       setEditingEmployeeId(null);
-      showMessageRequest("Funcionário atualizado com sucesso");
+      showMessageRequest(UPDATED_SUCCSESS_MESSAGE);
     } else {
-      showMessageRequest("Erro ao atualizar funcionário");
+      showMessageRequest(UPDATED_ERROR_MESSAGE, "error");
     }
   };
 
@@ -65,7 +67,7 @@ export const EmployeeList = () => {
       setEmployees(updatedEmployees);
       showMessageRequest(DELETE_SUCCESS_MESSAGE);
     } else {
-      showMessageRequest(result.message || DELETE_ERROR_MESSAGE);
+      showMessageRequest(DELETE_ERROR_MESSAGE, "error");
     }
   };
 

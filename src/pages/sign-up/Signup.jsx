@@ -7,7 +7,6 @@ import {
   EMAIL_ALREADY,
   EMAIL_ERROR_MESSAGE,
   PASSWORD_NOT_MATCH_MESSAGE,
-  showMessageRequest,
 } from "../../utils/index";
 import { Button } from "../../components/index";
 
@@ -35,8 +34,7 @@ export const Signup = () => {
     const result = await signup(email, password);
     setLoading(false);
       if (result.error === EMAIL_ALREADY) {
-        showMessageRequest(EMAIL_ERROR_MESSAGE);
-        window.location.reload();
+        setError(EMAIL_ERROR_MESSAGE,);
     } else {
       history.push("/");
     }
