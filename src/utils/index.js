@@ -17,6 +17,7 @@ export {
   PASSWORD_WEAK_ERROR_MESSAGE,
   EMPLOYEE_ADD_SUCCESS_MESSAGE,
   RESET_PASSWORD_ERROR_MESSAGE,
+  USER_SUCCESS_REGISTER_MESSAGE,
 } from "./messages";
 export { cpfMask, cepMask, showMessageRequest, showMessageWelcome } from "./utils";
 export {

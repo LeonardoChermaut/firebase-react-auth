@@ -21,28 +21,33 @@ export const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+    const password = passwordRef.current.value;
+    const passwordConfirm = passwordConfirmRef.current.value;
+
+    if (password !== passwordConfirm) {
       setError(PASSWORD_NOT_MATCH_MESSAGE);
       return;
     }
     setLoading(true);
     setError("");
-    const result = await signup(
-      emailRef.current.value,
-      passwordRef.current.value
-    );
-    setLoading(false);
-    if (result.error) {
-      if (result.error === EMAIL_ALREADY) {
-        setError(EMAIL_ERROR_MESSAGE);
+    try {
+      const result = await signup(emailRef.current.value, password);
+      if (result.error) {
+        if (result.error === EMAIL_ALREADY) {
+          setError(EMAIL_ERROR_MESSAGE);
+        } else {
+          setError(result.error);
+        }
       } else {
-        setError(result.error);
+        history.push("/");
       }
-    } else {
-      history.push("/");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
-
+  
   return (
     <section>
       <Container>
@@ -67,7 +72,11 @@ export const Signup = () => {
                   required
                 />
               </Form.Group>
-              <Button disabled={loading} variant="outline-success" type="submit">
+              <Button
+                disabled={loading}
+                variant="outline-success"
+                type="submit"
+              >
                 {loading ? "Registrando..." : "Registre-se"}
               </Button>
             </Form>

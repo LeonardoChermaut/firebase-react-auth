@@ -9,6 +9,7 @@ export const UPDATED_SUCCSESS_MESSAGE = "Perfil atualizado com sucesso";
 export const EMPLOYEE_ADD_ERROR_MESSAGE = "Erro ao adicionar funcionário"
 export const RESET_PASSWORD_ERROR_MESSAGE = "Falha ao redefinir a senha";
 export const DELETE_SUCCESS_MESSAGE = "Funcionário excluído com sucesso";
+export const USER_SUCCESS_REGISTER_MESSAGE = "Usuário cadastrado com sucesso";
 export const DELETE_ERROR_MESSAGE = "Ocorreu um erro ao excluir o funcionário";
 export const UPDATED_ERROR_MESSAGE = "Ocorreu um erro ao atualizar seu perfil";
 export const EMPLOYEE_ADD_SUCCESS_MESSAGE = "Funcionário adicionado com sucesso";

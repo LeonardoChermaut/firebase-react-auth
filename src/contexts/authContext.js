@@ -14,6 +14,7 @@ import {
   PASSWORD_WEAK,
   USER_NOT_FOUND,
   USER_NOT_FOUND_MESSAGE,
+  USER_SUCCESS_REGISTER_MESSAGE,
 } from "../utils/index";
 import {
   auth,
@@ -74,6 +75,8 @@ export const AuthProvider = ({ children }) => {
       if (mountedRef.current) {
         setCurrentUser(user);
       }
+      showMessageRequest(USER_SUCCESS_REGISTER_MESSAGE);
+      history.replace("/login");
     } catch (error) {
       if (error.code === EMAIL_ALREADY) {
         showMessageRequest(EMAIL_ERROR_MESSAGE);
