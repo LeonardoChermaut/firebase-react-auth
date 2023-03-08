@@ -3,7 +3,7 @@ import { Container } from "../../components";
 import { useAuth } from "../../contexts/index";
 import { CardLoginPage, ImageLogo } from "./Login.styled";
 import { Link, useHistory } from "react-router-dom";
-import logoLogin from "../../assets/logo-login.jpg";
+import logoLogin from "../../assets/logo-login.png";
 import { LOGIN_ERROR_MESSAGE } from "../../utils/messages";
 import { Form, Card, Alert } from "react-bootstrap";
 import { Button } from "../../components/button/Button";
