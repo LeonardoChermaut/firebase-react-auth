@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(user);
       }
       showMessageWelcome();
-      history.push("/inicio");
+      history.replace("/inicio");
     } catch (error) {
       if (error.code === USER_NOT_FOUND) {
         showMessageRequest(USER_NOT_FOUND_MESSAGE).then(() => {
