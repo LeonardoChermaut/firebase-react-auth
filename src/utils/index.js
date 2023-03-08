@@ -18,7 +18,7 @@ export {
   EMPLOYEE_ADD_SUCCESS_MESSAGE,
   RESET_PASSWORD_ERROR_MESSAGE,
 } from "./messages";
-export { cpfMask, cepMask, showMessageRequest } from "./utils";
+export { cpfMask, cepMask, showMessageRequest, showMessageWelcome } from "./utils";
 export {
   schemaSwal,
   schemaAlert,

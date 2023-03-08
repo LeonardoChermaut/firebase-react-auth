@@ -5,15 +5,22 @@ import { Form as EmployeeForm } from "../index";
 
 export const Modal = ({ employee, onClose, onSave }) => {
   const [show, setShow] = useState(true);
-  const handleClose = () => {
-    setShow(false);
-    onClose();
+  const [employeeData, setEmployee] = useState(employee);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setEmployee({ ...employeeData, [name]: value });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSave();
+    onSave(employeeData);
     handleClose();
+  };
+
+  const handleClose = () => {
+    setShow(false);
+    onClose();
   };
 
   return (
@@ -23,7 +30,11 @@ export const Modal = ({ employee, onClose, onSave }) => {
           <ModalEdit.Title>Editar funcionário</ModalEdit.Title>
         </ModalEdit.Header>
         <ModalEdit.Body>
-          <EmployeeForm employee={employee} onSubmit={handleSubmit} />
+          <EmployeeForm
+            employee={employeeData}
+            onInputChange={handleInputChange}
+            onSubmit={handleSubmit}
+          />
           <Button variant="secondary" onClick={handleClose}>
             Fechar
           </Button>

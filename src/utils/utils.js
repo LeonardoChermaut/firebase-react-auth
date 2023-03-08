@@ -31,6 +31,6 @@ export const alertConfirmResquest = async () => {
   return isConfirmed;
 };
 
-export const showMessageTimerRequest = () => {
+export const showMessageWelcome = () => {
   return Swal.fire(schemaAlertTimer);
 };

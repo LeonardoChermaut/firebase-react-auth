@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Lottie from "react-lottie";
 import { Button, Modal } from "../../components/index";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -10,6 +10,7 @@ import {
   deleteDocument,
   document,
   db,
+  updateDocUser,
 } from "../../db/firebase";
 import {
   showMessageRequest,
@@ -28,6 +29,7 @@ export const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingEmployeeId, setEditingEmployeeId] = useState(null);
+  const editingEmployee = useRef(null);
 
   const fetchEmployees = async () => {
     try {
@@ -43,6 +45,32 @@ export const EmployeeList = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleUpdateEmployee = async (updatedEmployee) => {
+    try {
+      const employeeRef = document(db, "employee", updatedEmployee.id);
+      await updateDocUser(employeeRef, updatedEmployee);
+      const updatedEmployees = employees.map((employee) => employee.id === updatedEmployee.id ? updatedEmployee : employee);
+      setEmployees(updatedEmployees);
+      editingEmployee.current = null;
+      setEditingEmployeeId(null);
+      showMessageRequest("Funcionário atualizado com sucesso");
+    } catch (error) {
+      showMessageRequest("Erro ao atualizar funcionário");
+      console.error(error);
+    }
+  };
+
+  const handleEditEmployee = (id) => {
+    const employee = employees.find((employee) => employee.id === id);
+    editingEmployee.current = employee;
+    setEditingEmployeeId(id);
+  };
+
+  const handleCloseModal = () => {
+    setEditingEmployeeId(null);
+    editingEmployee.current = null;
   };
 
   const handleDeleteEmployee = async (id) => {
@@ -64,17 +92,9 @@ export const EmployeeList = () => {
     }
   };
 
-  const handleEditEmployee = (id) => {
-    setEditingEmployeeId(id);
-  };
-
-  const handleCloseModal = () => {
-    setEditingEmployeeId(null);
-  };
-
   useEffect(() => {
     fetchEmployees();
-  }, []);
+  });
 
   return (
     <section>
@@ -119,9 +139,13 @@ export const EmployeeList = () => {
                           />
                         )}
                       </td>
-                      <td><Div>{employee.name}</Div></td>
+                      <td>
+                        <Div>{employee.name}</Div>
+                      </td>
                       <td>{employee.email}</td>
-                      <td><Div>{employee.cpf}</Div></td>
+                      <td>
+                        <Div>{employee.cpf}</Div>
+                      </td>
                       <td>{employee.hiringDate}</td>
                       <td>
                         <Div>
@@ -130,14 +154,20 @@ export const EmployeeList = () => {
                           {employee.address.city} - {employee.address.state}
                           <br></br>
                           Cep: {employee.address.cep}
-                          </Div>
+                        </Div>
                       </td>
-                       <td>{employee.status ? "Ativo" : "Inativo"}</td>
+                      <td>{employee.status ? "Ativo" : "Inativo"}</td>
                       <td>
-                        <Button variant="outline-primary" onClick={() => handleEditEmployee(employee.id)}>
+                        <Button
+                          variant="outline-primary"
+                          onClick={() => handleEditEmployee(employee.id)}
+                        >
                           <FaEdit />
                         </Button>
-                        <Button variant="outline-danger" onClick={() => handleDeleteEmployee(employee.id)}>
+                        <Button
+                          variant="outline-danger"
+                          onClick={() => handleDeleteEmployee(employee.id)}
+                        >
                           <FaTrash />
                         </Button>
                       </td>
@@ -158,6 +188,8 @@ export const EmployeeList = () => {
               (employee) => employee.id === editingEmployeeId
             )}
             onClose={handleCloseModal}
+            onSave={handleUpdateEmployee}
+            onInputChange={handleUpdateEmployee}
           />
         )}
       </ContainerTableEmployee>

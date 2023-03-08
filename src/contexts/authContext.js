@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import {
   showMessageRequest,
+  showMessageWelcome,
   EMAIL_ALREADY,
   EMAIL_ERROR_MESSAGE,
   PASSWORD_WEAK_ERROR_MESSAGE,
@@ -25,7 +26,7 @@ import {
   updatePasswordUser,
 } from "../db/firebase";
 import { useHistory } from "react-router-dom";
-import { showMessageTimerRequest } from "../utils/utils";
+
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -42,7 +43,7 @@ export const AuthProvider = ({ children }) => {
       if (mountedRef.current) {
         setCurrentUser(user);
       }
-      showMessageTimerRequest()
+      showMessageWelcome();
     } catch (error) {
       if (error.code === USER_NOT_FOUND) {
         showMessageRequest(USER_NOT_FOUND_MESSAGE).then(() => {
@@ -135,7 +136,7 @@ export const AuthProvider = ({ children }) => {
     signup,
     logout,
     resetPassword,
-    updateUserCredentials
+    updateUserCredentials,
   };
 
   return (
